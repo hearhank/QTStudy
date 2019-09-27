@@ -8,6 +8,7 @@
 #include "dataitem.hpp"
 #include "convertservers.hpp"
 #include "Singleton.hpp"
+#include "modbusconvert.hpp"
 
 class DataItems : public QObject
 {

@@ -23,7 +23,21 @@ void DataDesc::setOffset(int offset)
 
 int DataDesc::length() const
 {
-    return m_length;
+    if (m_dataType == DataType::String)
+        return m_length;
+
+    switch (m_dataType) {
+    case DataType::Int:
+    case DataType::UInt:
+    case DataType::Float:
+        return 2;
+    case DataType::Long:
+    case DataType::ULong:
+    case DataType::Double:
+        return 4;
+    default:
+        return 1;
+    }
 }
 
 void DataDesc::setLength(int length)

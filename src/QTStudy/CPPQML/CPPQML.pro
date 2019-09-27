@@ -19,6 +19,7 @@ SOURCES += \
         dataitem.cpp \
         dataitems.cpp \
         main.cpp \
+        modbusconvert.cpp \
         nameconvert.cpp
 
 RESOURCES += qml.qrc
@@ -41,4 +42,5 @@ HEADERS += \
     datadesc.hpp \
     dataitem.hpp \
     dataitems.hpp \
+    modbusconvert.hpp \
     nameconvert.hpp

@@ -17,6 +17,10 @@ Page {
             DataItem {
                 name: "Last Name"
                 value: "Hank"
+                desc: DataDesc {
+                    offset: 1
+                    dataType: DataDesc.Int
+                }
             },
             DataItem {
                 name: "Full Name"

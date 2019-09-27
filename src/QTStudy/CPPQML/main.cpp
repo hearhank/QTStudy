@@ -8,6 +8,7 @@
 #include "Singleton.hpp"
 #include "nameconvert.hpp"
 #include "datadesc.hpp"
+#include "modbusconvert.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -17,12 +18,15 @@ int main(int argc, char *argv[])
 
     Singleton<ConvertServers>::getInstance().Register(ConverterType::NameC,
                                                       new NameConvert());
+    Singleton<ConvertServers>::getInstance().Register(ConverterType::None,
+                                                      new ModbusConvert());
 
     qmlRegisterType<DataDesc>("Proton.Datas", 1, 0, "DataDesc");
     qmlRegisterType<DataItem>("Proton.Datas", 1, 0, "DataItem");
     qmlRegisterType<DataItems>("Proton.Datas", 1, 0, "DataItems");
 
     qmlRegisterType<ConverterType>("Proton.Datas", 1, 0, "ConverterType");
+
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));

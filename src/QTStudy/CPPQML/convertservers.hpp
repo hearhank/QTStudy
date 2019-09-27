@@ -13,14 +13,14 @@ public:
     ~ConvertServers();
 
 
-    void Register(ConverterType::DataConverter type, NameConvert *service);
-    NameConvert *GetService(ConverterType::DataConverter type);
+    void Register(ConverterType::DataConverter type, QObject *service);
+    QObject *GetService(ConverterType::DataConverter type);
 
 signals:
 
 public slots:
 private:
-    QHash<ConverterType::DataConverter, NameConvert*> m_Services;
+    QHash<ConverterType::DataConverter, QObject*> m_Services;
 };
 
 #endif // CONVERTSERVERS_HPP

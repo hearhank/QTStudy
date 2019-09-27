@@ -91,11 +91,17 @@ void DataItems::update() {
             auto service = Singleton<ConvertServers>::getInstance().GetService(
                 item->convertType());
             if (service != nullptr) {
-                auto val = service->Convert(item->refItems());
+                auto val = static_cast<NameConvert*>(service)->Convert(item->refItems());
                 const_cast<DataItem *>(item)->setValue(val);
             }
         }else{
             //Normal Update
+            auto service = Singleton<ConvertServers>::getInstance().GetService(
+                item->convertType());
+            if (service != nullptr) {
+                auto val = static_cast<ModbusConvert>(service).Convert(item->desc());
+                const_cast<DataItem *>(item)->setValue(val);
+            }
         }
     }
 }
