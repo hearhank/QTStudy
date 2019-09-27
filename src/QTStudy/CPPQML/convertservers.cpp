@@ -6,21 +6,21 @@ ConvertServers::ConvertServers(QObject *parent) : QObject(parent)
 }
 
 ConvertServers::~ConvertServers() {
-    QHashIterator<ConverterType::DataConverter, QObject *> i(m_Services);
+    QHashIterator<CH::DataConverter, QObject *> i(m_Services);
     while (i.hasNext()) {
         i.next().value()->deleteLater();
     }
     m_Services.clear();
 }
 
-void ConvertServers::Register(ConverterType::DataConverter type,
+void ConvertServers::Register(CH::DataConverter type,
                               QObject *service) {
     if (!m_Services.contains(type)) {
         m_Services.insert(type, service);
     }
 }
 
-QObject *ConvertServers::GetService(ConverterType::DataConverter type) {
+QObject *ConvertServers::GetService(CH::DataConverter type) {
     if (m_Services.contains(type)) {
         return m_Services[type];
     }

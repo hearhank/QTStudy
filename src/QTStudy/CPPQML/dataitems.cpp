@@ -87,7 +87,7 @@ void DataItems::update() {
         if (!item->isLoad())
             const_cast<DataItem *>(item)->Load(this->items());
 
-        if (item->convertType() != ConverterType::DataConverter::None) {
+        if (item->convertType() != CH::DataConverter::None) {
             auto service = Singleton<ConvertServers>::getInstance().GetService(
                 item->convertType());
             if (service != nullptr) {

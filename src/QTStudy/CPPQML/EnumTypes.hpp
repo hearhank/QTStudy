@@ -3,13 +3,13 @@
 
 #include <QObject>
 
-class ConverterType : public QObject
+class CH : public QObject
 {
     Q_OBJECT
     Q_ENUMS(DataConverter)
     Q_ENUMS(DeviceType)
 public:
-    ConverterType(QObject *parent = nullptr) : QObject(parent){
+    CH(QObject *parent = nullptr) : QObject(parent){
     }
     enum DataConverter { None,
                          NameC };

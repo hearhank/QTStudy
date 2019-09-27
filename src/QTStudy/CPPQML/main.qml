@@ -36,7 +36,7 @@ ApplicationWindow {
         height: window.height
 
         Column {
-            anchors.fill: parent
+            width: parent.width
 
             ItemDelegate {
                 text: qsTr("Page 1")
@@ -69,5 +69,8 @@ ApplicationWindow {
         id: stackView
         initialItem: "HomeForm.ui.qml"
         anchors.fill: parent
+    }
+    Component.onCompleted: {
+        stackView.push("DataItemsPage.qml")
     }
 }

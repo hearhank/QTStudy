@@ -3,12 +3,15 @@ import QtQuick.Controls 2.0
 import Proton.Datas 1.0
 
 Page {
+    width: parent.width
+    height: parent.height
     DataItems {
         id: binding_datas
         datas: [
             DataItem {
-                name: "First Name"
-                value: "Chen"
+                name: "On/Off"
+                value: "1"
+                eletype: DataItem.SWitchButton
                 desc: DataDesc {
                     offset: 0
                     dataType: DataDesc.UShort
@@ -24,9 +27,10 @@ Page {
             },
             DataItem {
                 name: "Full Name"
-                refNames: ["First Name", "Last Name"]
+                refNames: ["On/Off", "Last Name"]
                 value: ""
-                convertType: ConverterType.NameC
+                enabled: true
+                convertType: CH.NameC
             }
         ]
     }
@@ -35,29 +39,18 @@ Page {
         id: wrapper
         anchors.fill: parent
         model: binding_datas.datas
-        delegate: ItemDelegate {
-            Item {
-                width: parent.width
-                height: 35
+        delegate: PhoneItemDelegate {
+            onItemClicked: {
 
-                //color: index % 2 == 0 ? "white" : "silver"
-                Label {
-                    anchors.verticalCenter: parent.verticalCenter
-                    verticalAlignment: Text.AlignVCenter
-                    id: name
-                    text: model.value
-                }
+            }
+            onSwitchChanged: {
 
-                //                Rectangle {
-                //                    color: index % 2 == 0 ? "white" : "silver"
-                //                    height: 1
-                //                    anchors.fill: parent
-                //                }
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        wrapper.currentIndex = index
-                    }
+            }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    wrapper.currentIndex = index
+                    console.log(model)
                 }
             }
         }
@@ -75,3 +68,10 @@ Page {
         binding_datas.update()
     }
 }
+
+/*##^##
+Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+##^##*/
+

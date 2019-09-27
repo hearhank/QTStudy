@@ -6,5 +6,6 @@
         <file>Page2Form.ui.qml</file>
         <file>qtquickcontrols2.conf</file>
         <file>DataItemsPage.qml</file>
+        <file>PhoneItemDelegate.qml</file>
     </qresource>
 </RCC>

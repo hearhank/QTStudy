@@ -16,16 +16,17 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
 
-    Singleton<ConvertServers>::getInstance().Register(ConverterType::NameC,
+    Singleton<ConvertServers>::getInstance().Register(CH::NameC,
                                                       new NameConvert());
-    Singleton<ConvertServers>::getInstance().Register(ConverterType::None,
+    Singleton<ConvertServers>::getInstance().Register(CH::None,
                                                       new ModbusConvert());
 
     qmlRegisterType<DataDesc>("Proton.Datas", 1, 0, "DataDesc");
     qmlRegisterType<DataItem>("Proton.Datas", 1, 0, "DataItem");
     qmlRegisterType<DataItems>("Proton.Datas", 1, 0, "DataItems");
 
-    qmlRegisterType<ConverterType>("Proton.Datas", 1, 0, "ConverterType");
+
+    qmlRegisterType<CH>("Proton.Datas", 1, 0, "CH");
 
 
     QQmlApplicationEngine engine;
