@@ -104,6 +104,7 @@ compile_commands.json
 .pch/
 .rcc/
 .uic/
+/*-debug/
 /*-release/
 /dist/gdb/*.gz
 /dist/gdb/python/
@@ -132,3 +133,4 @@ tmp/
 # qbs builds
 /*-debug/
 /*-release/
+src/build-QTStudy-Desktop_Qt_5_9_8_MinGW_32bit-Debug/*

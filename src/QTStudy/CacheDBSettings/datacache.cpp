@@ -89,9 +89,10 @@ bool DataCache::RemoveGroup(const QString &group) {
 
 void DataCache::Print() {
     QHashIterator<QString, QHash<QString, CacheItem> > i(m_datas);
+    qDebug() << "=========================================================";
     while (i.hasNext()) {
         i.next();
-        qDebug() << i.key();
+        qDebug() << "# " << i.key();
         QHashIterator<QString, CacheItem> j(i.value());
         while (j.hasNext()) {
             j.next();
