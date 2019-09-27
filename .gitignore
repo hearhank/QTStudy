@@ -1,6 +1,134 @@
+# This file is used to ignore files which are generated
+# ----------------------------------------------------------------------------
 
-*.Release
-*.Debug
+!core/
+*.*#
+*.a
+*.app
+*.autosave
+*.core
+*.debug
+*.embed.manifest
+*.moc
 *.o
+*.obj
+*.orig
+*.prl
+*.qm
+*.rc
+*.rej
+*.res
+*.so
+*.so.*
+*_pch.h.cpp
+*_resource.rc
+*_wrapper.bat
+*_wrapper.sh
+*~
+.#*
+.DS_Store
+.qmake.cache
+.qmake.stash
+Makefile*
+Thumbs.db
+core
+moc_*.cpp
+qrc_*.cpp
+tags
+ui_*.h
+wrapper.bat
+wrapper.sh
+
+# qtcreator generated files
+*.creator.user*
+*.pro.user*
+*.pyqtc.user*
+*.qbs.user*
+*.qmlproject.user*
+CMakeLists.txt.user*
+app_version.h
+phony.c
+
+# xemacs temporary files
+*.flc
+
+# Vim temporary files
+.*.swp
+
+# Visual Studio generated files
+*.ib_pdb_index
+*.idb
+*.ilk
+*.ncb
+*.opensdf
+*.pdb
+*.sdf
+*.sln
+*.suo
+*.vcproj
+*.vcxproj
+*vcproj.*.*.user
+*vcxproj.*
+
+# gcov files
+*.gcda
+*.gcno
+*.gcov
+
+# MinGW generated files
+*.Debug
+*.Release
+
+# Python byte code
+*.pyc
+
+# translation related:
+/share/qtcreator/translations/*_tr.h
+/share/qtcreator/translations/qtcreator_untranslated.ts
+
+# Qml caching files
+*.jsc
+*.qmlc
+
+# Squish generated files
+/tests/system/suite_*/config.xml
+
+# Clang tooling files
+compile_commands.json
+
+# Directories to ignore
+# ---------------------
+
+.moc/
+.obj/
+.pch/
+.rcc/
+.uic/
+/*-release/
+/dist/gdb/*.gz
+/dist/gdb/python/
+/dist/gdb/qtcreator-*/
+/dist/gdb/source/
+/dist/gdb/staging/
+/doc/qbs/
+/doc/qtcreator/
+/doc/qtcreator-dev/
+/doc/pluginhowto/html/
+/lib/
+/lib64/
+/libexec/
+debug/
+ipch/
+release/
+tmp/
+# ignore both a directory as well as a symlink
+/share/qtcreator/QtProject
+
+# Binaries
+# --------
+*.dll
 *.exe
-/build*/*
+
+# qbs builds
+/*-debug/
+/*-release/
