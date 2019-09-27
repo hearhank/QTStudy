@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         cacheitem.cpp \
         datacache.cpp \
+        inisettingsstore.cpp \
         main.cpp \
         sqlitedbstore.cpp
 
@@ -29,6 +30,7 @@ HEADERS += \
     Helper.hpp \
     cacheitem.hpp \
     datacache.hpp \
+    inisettingsstore.hpp \
     res.hpp \
     singleton.hpp \
     sqlitedbstore.hpp

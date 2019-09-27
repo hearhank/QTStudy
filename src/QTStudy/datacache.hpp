@@ -14,17 +14,22 @@ class DataCache : public QObject
 public:
     explicit DataCache(QObject *parent = nullptr);
 
+    void Load(const QString &dgroup);
+
     void Set(const QString &key, const QVariant val, const QString &group = "");
 
     CacheItem* Get(const QString &key, QVariant dval = QVariant(), const QString &group = "");
+    QList<CacheItem> GetByGroup(const QString &group);
 
     void Update(const QString &key, const QVariant val, const QString &group = "");
 
     bool Remove(const QString &key, const QString &group);
 
-    void SaveToFile(const QString &path);
+    bool RemoveGroup(const QString &group);
 
-    void LoadFromFile(const QString &path);
+//    void SaveToFile(const QString &path);
+
+//    void LoadFromFile(const QString &path);
 
     void Print();
 
@@ -38,6 +43,7 @@ private:
     QHash<QString, QHash<QString, CacheItem> > m_datas;
     ~DataCache();
     QString m_LastFile;
+    QString m_group;
 
     SqliteDBStore *m_store = nullptr;
 

@@ -3,8 +3,22 @@
 
 
 DataCache::DataCache(QObject *parent) : QObject(parent) {
+
+
+}
+
+void DataCache::Load(const QString &dgroup) {
+    m_group = dgroup;
     m_store = new SqliteDBStore("kvcnf");
-    m_store->Load();
+    QList<CacheItem> datas = m_store->Load(m_group);
+    if (m_datas.contains(m_group)) {
+        m_datas[m_group].clear();
+    } else {
+        m_datas.insert(m_group, QHash<QString, CacheItem>());
+    }
+    foreach (CacheItem item, datas) {
+        m_datas[m_group].insert(item.Key(), item);
+    }
 }
 
 void DataCache::Set(const QString &key, const QVariant val,
@@ -37,15 +51,38 @@ CacheItem* DataCache::Get(const QString &key, QVariant dval, const QString &grou
     return item;
 }
 
+QList<CacheItem> DataCache::GetByGroup(const QString &group) {
+    QList<CacheItem> items;
+    if (m_datas.contains(group)) {
+
+    }else{
+
+    }
+    return items;
+}
+
 void DataCache::Update(const QString &key, const QVariant val, const QString &group) {
     if (Contains(key, group)) {
+        if(m_store != nullptr)
+            m_store->Update(CacheItem(key, val, group));
         m_datas[group][key].setValue(val);
     }
 }
 
 bool DataCache::Remove(const QString &key, const QString &group) {
     if (m_datas.contains(group)) {
+        if(m_store != nullptr)
+            m_store->Delete(group, key);
         return m_datas[group].remove(key) > 0;
+    }
+    return false;
+}
+
+bool DataCache::RemoveGroup(const QString &group) {
+    if (m_datas.contains(group)) {
+        if(m_store != nullptr)
+            m_store->Delete(group);
+        return m_datas.remove(group) > 0;
     }
     return false;
 }
@@ -79,6 +116,10 @@ bool DataCache::Contains(const QString &key, const QString &group = "") {
 }
 
 DataCache::~DataCache() {
+    if (m_store != nullptr) {
+        m_store->Close();
+        delete m_store;
+    }
     m_datas.clear();
     qDebug() << "~Destory DataCache";
 }
