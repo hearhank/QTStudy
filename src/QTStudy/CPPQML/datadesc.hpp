@@ -2,6 +2,7 @@
 #define DATADESC_HPP
 
 #include <QObject>
+#include <QDebug>
 
 class DataDesc : public QObject
 {
@@ -17,6 +18,7 @@ class DataDesc : public QObject
     Q_PROPERTY(DataArea dataArea READ dataArea WRITE setDataArea)
 public:
     DataDesc(QObject *parent = nullptr);
+    ~DataDesc();
 
     enum DataType {
         Boolean,

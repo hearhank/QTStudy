@@ -22,7 +22,8 @@ class DataItem : public QObject
     Q_PROPERTY(QString unit READ unit WRITE setUnit NOTIFY unitChanged)
     Q_PROPERTY(int eletype READ eletype WRITE setEletype NOTIFY eletypeChanged)
     Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
-    Q_PROPERTY(bool store READ getStore WRITE setStore)
+//    Q_PROPERTY(bool store READ getStore WRITE setStore)
+    Q_PROPERTY(bool hidden READ getHidden WRITE setHidden)
 public:
     enum EleType {
         Label,
@@ -65,8 +66,11 @@ public:
     bool enabled() const;
     void setEnabled(bool enabled);
 
-    bool getStore() const;
-    void setStore(bool store);
+//    bool getStore() const;
+//    void setStore(bool store);
+
+    bool getHidden() const;
+    void setHidden(bool hidden);
 
 signals:
     void nameChanged(const QString &name);
@@ -87,8 +91,10 @@ private:
     DataDesc *m_desc;
     QString m_unit;
     EleType m_eletype;
-    bool m_enabled;
-    bool m_store;
+    bool m_enabled = true;
+    //OLD 请在主页添加此类型的变量,去掉。
+//    bool m_store = false;
+    bool m_hidden = false;
 };
 
 #endif // DATAITEM_HPP

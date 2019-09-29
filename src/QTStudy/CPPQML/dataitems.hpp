@@ -1,6 +1,7 @@
 #ifndef DATAITEMS_HPP
 #define DATAITEMS_HPP
 
+#include <iostream>
 #include <QDebug>
 #include <QObject>
 #include <QList>
@@ -36,7 +37,6 @@ public slots:
 //    void upgradeValue(int index, const QVariant &val);
 //    void update();
 private:
-
     static void add(QQmlListProperty<DataItem>* list, DataItem* at);
     static int count(QQmlListProperty<DataItem>* list);
     static DataItem* at(QQmlListProperty<DataItem>* list, int index);

@@ -10,7 +10,6 @@ Page {
             DataItem {
                 name: "Count"
                 value: 10
-                store: true
             },
             DataItem {
                 name: "On/Off"

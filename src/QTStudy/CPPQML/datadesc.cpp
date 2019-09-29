@@ -11,6 +11,10 @@ DataDesc::DataDesc(QObject *parent) : QObject(parent),
 
 }
 
+DataDesc::~DataDesc() {
+    qDebug() << "~DataDesc()";
+}
+
 int DataDesc::offset() const
 {
     return m_offset;

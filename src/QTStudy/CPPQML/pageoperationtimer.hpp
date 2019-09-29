@@ -7,6 +7,8 @@
 #include <QDateTime>
 #include <QTimer>
 #include <QtConcurrent/QtConcurrent>
+#include <QMutexLocker>
+
 
 class PageOperationTimer : public QObject
 {
@@ -15,11 +17,12 @@ class PageOperationTimer : public QObject
 public:
     explicit PageOperationTimer(QObject *parent = nullptr);
     ~PageOperationTimer();
-    Q_INVOKABLE void start(DataItems* items);
+    Q_INVOKABLE void start(DataItems *items);
     void stop();
     int interval() const;
     void setInterval(int interval);
     void runSync();
+
 
 signals:
 
@@ -33,6 +36,7 @@ private:
     DataItems* m_items;
     int m_interval;
     bool m_flag = false;
+    QMutex m_mutex;
 };
 
 #endif // PAGEOPERATIONTIMER_HPP

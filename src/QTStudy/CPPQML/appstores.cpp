@@ -1,22 +1,38 @@
 #include "appstores.hpp"
 
-AppStores::AppStores(QObject *parent) : QObject(parent)
+AppStores::AppStores(QObject *parent) : QObject(parent), m_items()
 {
 
 }
 
-void AppStores::addDataItem(const DataItem *item) {
-    if (!m_stores.contains(item->name())) {
-        m_stores.insert(item->name(), const_cast<DataItem *>(item));
+AppStores::~AppStores() {
+    qDeleteAll(m_items.values());
+    qDebug() << "~AppStores()";
+}
+
+void AppStores::addDataItem(DataItem *item) {
+    QMutexLocker lock(&m_mutex);
+    if (!m_items.contains(item->name())) {
+        item->setParent(this);
+        m_items.insert(item->name(), item);
     }
 }
 
 DataItem *AppStores::getDataItem(const QString &name) const {
-    if (m_stores.contains(name))
-        return m_stores[name];
+    if (m_items.contains(name))
+        return m_items[name];
     return nullptr;
 }
 
-QList<DataItem *> AppStores::getDataItems() const {
-    return m_stores.values();
+QList<DataItem*> AppStores::getDataItems() const {
+    return m_items.values();
+}
+
+void AppStores::Load() {
+    auto items = m_items.values();
+    foreach (auto item, items) {
+        if (!item->isLoad()) {
+            item->Load(items);
+        }
+    }
 }

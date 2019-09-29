@@ -16,6 +16,7 @@ DataItem::DataItem(QObject *parent) : QObject(parent),
 DataItem::~DataItem() {
     if (m_desc != nullptr)
         m_desc->deleteLater();
+    qDebug() << "~DataItem()";
 }
 
 void DataItem::Load(const QList<DataItem*> datas) {
@@ -42,6 +43,16 @@ void DataItem::getValueChanged(const QVariant &newVal) {
         list.append(i.next()->value());
     }
     emit valueChanged(this->value(), list);
+}
+
+bool DataItem::getHidden() const
+{
+    return m_hidden;
+}
+
+void DataItem::setHidden(bool hidden)
+{
+    m_hidden = hidden;
 }
 
 QVariant DataItem::value() const {
@@ -146,14 +157,14 @@ void DataItem::setEnabled(bool enabled) {
     }
 }
 
-bool DataItem::getStore() const
-{
-    return m_store;
-}
+//bool DataItem::getStore() const
+//{
+//    return m_store;
+//}
 
-void DataItem::setStore(bool store)
-{
-    m_store = store;
-}
+//void DataItem::setStore(bool store)
+//{
+//    m_store = store;
+//}
 
 

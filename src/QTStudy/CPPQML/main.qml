@@ -1,5 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
+import Proton.Datas 1.0
 
 ApplicationWindow {
     id: window
@@ -70,6 +71,7 @@ ApplicationWindow {
         initialItem: "HomeForm.ui.qml"
         anchors.fill: parent
     }
+
     Component.onCompleted: {
         stackView.push("DataItemsPage.qml")
     }

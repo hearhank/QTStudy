@@ -6,6 +6,7 @@ DataItems::DataItems(QObject *parent) : QObject(parent)
 }
 DataItems::~DataItems(){
     //    qDeleteAll(m_items);
+    qDebug() << "~DataItems()";
 }
 
 QQmlListProperty<DataItem> DataItems::datas(){
@@ -65,9 +66,10 @@ void DataItems::Load() {
         if (!item->isLoad()) {
             item->Load(m_items);
         }
-        if (item->getStore()) {
-            Singleton<AppStores>::getInstance().addDataItem(item);
-        }
+//        if (item->getStore()) {
+//            Singleton<AppStores>::getInstance().addDataItem(item);
+//            qDebug() << item->parent();
+//        }
     }
 }
 

@@ -8,6 +8,7 @@ PageOperationTimer::PageOperationTimer(QObject *parent) : QObject(parent),
 
 PageOperationTimer::~PageOperationTimer() {
     stop();
+    qDebug() << "~Page Operation Timer";
 }
 
 void PageOperationTimer::start(DataItems *items) {
@@ -18,25 +19,30 @@ void PageOperationTimer::start(DataItems *items) {
     m_timer.start(m_interval);
 }
 
+
 void PageOperationTimer::stop() {
     m_timer.stop();
     disconnect(&m_timer, &QTimer::timeout, this, &PageOperationTimer::runSync);
 }
 
+void PageOperationTimer::runSync() {
+
+    QFuture<void> future = QtConcurrent::run(this, &PageOperationTimer::doRead);
+    future.waitForFinished();
+}
+
 void PageOperationTimer::doRead() {
-    //    qDebug() << "Read..." << m_items->count();
+    QMutexLocker lock(&m_mutex);
     foreach (auto item, m_items->items()) {
         item->setValue(ReadDataItem(item));
     }
-    m_flag = false;
 }
+
 
 QVariant PageOperationTimer::ReadDataItem(const DataItem *item) {
     //TODO
-//    qDebug() << "read from " << item->name() << item->value().typeName();
     int r = item->value().toInt();
     r += 1;
-//    qDebug() << r;
     return r;
 }
 
@@ -55,9 +61,4 @@ void PageOperationTimer::setInterval(int interval)
     m_interval = interval;
 }
 
-void PageOperationTimer::runSync() {
-    if (m_flag)
-        return;
-    m_flag = true;
-    QtConcurrent::run(this, &PageOperationTimer::doRead);
-}
+
