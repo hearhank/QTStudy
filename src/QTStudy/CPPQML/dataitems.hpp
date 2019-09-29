@@ -9,6 +9,7 @@
 #include "convertservers.hpp"
 #include "Singleton.hpp"
 #include "modbusconvert.hpp"
+#include "appstores.hpp"
 
 class DataItems : public QObject
 {
@@ -18,21 +19,24 @@ public:
     explicit DataItems(QObject *parent = nullptr);
     ~DataItems();
 
-
     QQmlListProperty<DataItem> datas();
     void add(DataItem*);
     int count();
     DataItem *at(int) const;
     void clear();
+    QList<DataItem *> items();
 
+    void Load();
+
+    Q_INVOKABLE DataItem *getStore(const QString &name);
 signals:
     void datasChanged(int count);
 
 public slots:
-    void upgradeValue(int index, const QVariant &val);
-    void update();
+//    void upgradeValue(int index, const QVariant &val);
+//    void update();
 private:
-    QList<DataItem *> items() const;
+
     static void add(QQmlListProperty<DataItem>* list, DataItem* at);
     static int count(QQmlListProperty<DataItem>* list);
     static DataItem* at(QQmlListProperty<DataItem>* list, int index);

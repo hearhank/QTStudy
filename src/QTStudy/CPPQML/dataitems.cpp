@@ -8,22 +8,16 @@ DataItems::~DataItems(){
     //    qDeleteAll(m_items);
 }
 
-//DataItem *DataItems::Current() const {
-//    if(m_items.count() > 0)
-//        return m_items.at(0);
-//    return nullptr;
-//}
-
 QQmlListProperty<DataItem> DataItems::datas(){
-    return QQmlListProperty<DataItem>(this, this,
-                                      &DataItems::add,
-                                      &DataItems::count,
-                                      &DataItems::at,
-                                      &DataItems::clear);
+    return QQmlListProperty<DataItem>(this, m_items);
+//,
+//                                      &DataItems::add,
+//                                      &DataItems::count,
+//                                      &DataItems::at,
+//                                      &DataItems::clear);
 }
 
-void DataItems::add(DataItem * item){
-    //item->setIndex(m_items.count());
+void DataItems::add(DataItem *item) {
     m_items.append(item);
     emit datasChanged(m_items.count());
 }
@@ -45,6 +39,10 @@ void DataItems::clear(){
     emit datasChanged(0);
 }
 
+DataItem *DataItems::getStore(const QString &name) {
+    return Singleton<AppStores>::getInstance().getDataItem(name);
+}
+
 void DataItems::add(QQmlListProperty<DataItem>* list, DataItem *item)
 {
     reinterpret_cast<DataItems*>(list->data)->add(item);
@@ -55,9 +53,22 @@ void DataItems::clear(QQmlListProperty<DataItem> *list)
     reinterpret_cast<DataItems*>(list->data)->clear();
 }
 
-QList<DataItem *> DataItems::items() const
+QList<DataItem *> DataItems::items()
 {
     return m_items;
+}
+
+void DataItems::Load() {
+    if (m_items.count() == 0)
+        return;
+    foreach (auto item, m_items) {
+        if (!item->isLoad()) {
+            item->Load(m_items);
+        }
+        if (item->getStore()) {
+            Singleton<AppStores>::getInstance().addDataItem(item);
+        }
+    }
 }
 
 DataItem* DataItems::at(QQmlListProperty<DataItem> *list, int index)
@@ -68,40 +79,4 @@ DataItem* DataItems::at(QQmlListProperty<DataItem> *list, int index)
 int DataItems::count(QQmlListProperty<DataItem> *list)
 {
     return reinterpret_cast<DataItems*>(list->data)->count();
-}
-
-void DataItems::upgradeValue(int index, const QVariant &val)
-{
-    if (!this->at(index)->isLoad()) {
-        this->at(index)->Load(this->items());
-    }
-    this->at(index)->setValue(val);
-}
-
-void DataItems::update() {
-    qDebug() << "update...";
-    QListIterator<DataItem *> i(m_items);
-    while (i.hasNext()) {
-        // Update
-        const DataItem *item = i.next();
-        if (!item->isLoad())
-            const_cast<DataItem *>(item)->Load(this->items());
-
-        if (item->convertType() != CH::DataConverter::None) {
-            auto service = Singleton<ConvertServers>::getInstance().GetService(
-                item->convertType());
-            if (service != nullptr) {
-                auto val = static_cast<NameConvert*>(service)->Convert(item->refItems());
-                const_cast<DataItem *>(item)->setValue(val);
-            }
-        }else{
-            //Normal Update
-            auto service = Singleton<ConvertServers>::getInstance().GetService(
-                item->convertType());
-            if (service != nullptr) {
-                auto val = static_cast<ModbusConvert>(service).Convert(item->desc());
-                const_cast<DataItem *>(item)->setValue(val);
-            }
-        }
-    }
 }

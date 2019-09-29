@@ -5,16 +5,13 @@ import QtQuick.Layouts 1.3
 import Proton.Datas 1.0
 
 ItemDelegate {
-    width: parent.width
-    height: 50
     id: phoneDelegate
     signal itemClicked(var index)
     signal switchChanged(var ele)
     signal itemButtonClicked(var ele)
     property bool isItemReadOnly: false
     Item {
-        width: parent.width
-
+        anchors.fill: parent
         RowLayout {
             width: parent.width
             height: parent.height

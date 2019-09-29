@@ -9,6 +9,7 @@
 #include "nameconvert.hpp"
 #include "datadesc.hpp"
 #include "modbusconvert.hpp"
+#include "pageoperationtimer.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -24,6 +25,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<DataDesc>("Proton.Datas", 1, 0, "DataDesc");
     qmlRegisterType<DataItem>("Proton.Datas", 1, 0, "DataItem");
     qmlRegisterType<DataItems>("Proton.Datas", 1, 0, "DataItems");
+    qmlRegisterType<PageOperationTimer>("Proton.Datas", 1, 0, "PageOperationTimer");
 
 
     qmlRegisterType<CH>("Proton.Datas", 1, 0, "CH");

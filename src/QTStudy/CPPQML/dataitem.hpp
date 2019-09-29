@@ -20,8 +20,9 @@ class DataItem : public QObject
     Q_PROPERTY(CH::DataConverter convertType READ convertType WRITE setConvertType)
     Q_PROPERTY(DataDesc * desc READ desc WRITE setDesc)
     Q_PROPERTY(QString unit READ unit WRITE setUnit NOTIFY unitChanged)
-    Q_PROPERTY(EleType eletype READ eletype WRITE setEletype NOTIFY eletypeChanged)
+    Q_PROPERTY(int eletype READ eletype WRITE setEletype NOTIFY eletypeChanged)
     Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
+    Q_PROPERTY(bool store READ getStore WRITE setStore)
 public:
     enum EleType {
         Label,
@@ -58,20 +59,24 @@ public:
     QString unit() const;
     void setUnit(const QString &unit);
 
-    EleType eletype() const;
-    Q_INVOKABLE int getEletype();
-    void setEletype(const EleType &eletype);
+    int eletype() const;
+    void setEletype(const int &eletype);
 
     bool enabled() const;
     void setEnabled(bool enabled);
 
+    bool getStore() const;
+    void setStore(bool store);
+
 signals:
     void nameChanged(const QString &name);
     void unitChanged(const QString &unit);
-    void eletypeChanged(const EleType &eletype);
+    void eletypeChanged(const int &eletype);
     void enabledChanged(const bool &enabled);
-    void valueChanged(const QVariant &newVal);
+    void valueChanged(const QVariant &val, const QList<QVariant> &vals);
+//    void valuesChanged(const QVariant &val, const QList<QVariant> &vals);
 public slots:
+    void getValueChanged(const QVariant &newVal);
 private:
     QVariant m_value;
     QString m_name;
@@ -83,6 +88,7 @@ private:
     QString m_unit;
     EleType m_eletype;
     bool m_enabled;
+    bool m_store;
 };
 
 #endif // DATAITEM_HPP

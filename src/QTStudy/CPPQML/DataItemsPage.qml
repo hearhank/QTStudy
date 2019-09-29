@@ -1,16 +1,20 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0
+import QtQuick.Layouts 1.0
 import Proton.Datas 1.0
 
 Page {
-    width: parent.width
-    height: parent.height
     DataItems {
         id: binding_datas
         datas: [
             DataItem {
+                name: "Count"
+                value: 10
+                store: true
+            },
+            DataItem {
                 name: "On/Off"
-                value: "1"
+                value: 1
                 eletype: DataItem.SWitchButton
                 desc: DataDesc {
                     offset: 0
@@ -31,6 +35,14 @@ Page {
                 value: ""
                 enabled: true
                 convertType: CH.NameC
+                onValueChanged: {
+
+                    //                    var v = binding_datas.getStore("Count")
+                    //                    console.log(v.name)
+                    //                    console.log(v.value)
+                    //                    console.log(val)
+                    //                    console.log(vals)
+                }
             }
         ]
     }
@@ -40,6 +52,8 @@ Page {
         anchors.fill: parent
         model: binding_datas.datas
         delegate: PhoneItemDelegate {
+            width: parent.width
+            height: 50
             onItemClicked: {
 
             }
@@ -50,7 +64,6 @@ Page {
                 anchors.fill: parent
                 onClicked: {
                     wrapper.currentIndex = index
-                    console.log(model)
                 }
             }
         }
@@ -64,8 +77,13 @@ Page {
         highlightResizeDuration: 0
     }
 
+    PageOperationTimer {
+        id: operator
+        interval: 10
+    }
+
     Component.onCompleted: {
-        binding_datas.update()
+        operator.start(binding_datas)
     }
 }
 

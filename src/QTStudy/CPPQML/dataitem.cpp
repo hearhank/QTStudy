@@ -2,6 +2,7 @@
 
 DataItem::DataItem(QObject *parent) : QObject(parent),
     m_value(QVariant()),
+    m_refNames(),
     m_convertType(CH::DataConverter::None),
     m_load(false),
     m_desc(nullptr),
@@ -26,13 +27,21 @@ void DataItem::Load(const QList<DataItem*> datas) {
         while (i.hasNext()) {
             const DataItem* item = i.next();
             if (m_refNames.contains(item->name())) {
+                connect(item, &DataItem::valueChanged, this, &DataItem::getValueChanged);
                 m_refItems.append(const_cast<DataItem*>(item));
             }
         }
-        //TODO
-        //this->setConvertType(ConverterType::NameC);
+        qDebug() << name() << " Load";
     }
     m_load = true;
+}
+void DataItem::getValueChanged(const QVariant &newVal) {
+    QList<QVariant> list;
+    QListIterator<DataItem *> i(this->m_refItems);
+    while (i.hasNext()) {
+        list.append(i.next()->value());
+    }
+    emit valueChanged(this->value(), list);
 }
 
 QVariant DataItem::value() const {
@@ -40,9 +49,13 @@ QVariant DataItem::value() const {
 }
 
 void DataItem::setValue(const QVariant &value) {
+
     if (m_value != value) {
         m_value = value;
-        emit valueChanged(m_value);
+        if(m_refItems.count() == 0)
+            emit valueChanged(m_value, QList<QVariant>());
+        else
+            getValueChanged(m_value);
     }
 }
 
@@ -110,18 +123,14 @@ void DataItem::setUnit(const QString &unit) {
     }
 }
 
-DataItem::EleType DataItem::eletype() const {
+int DataItem::eletype() const {
     return m_eletype;
 }
 
-int DataItem::getEletype() {
-    qDebug() << m_eletype;
-    return m_eletype;
-}
 
-void DataItem::setEletype(const EleType &elementType) {
+void DataItem::setEletype(const int &elementType) {
     if (m_eletype != elementType) {
-        m_eletype = elementType;
+        m_eletype = (DataItem::EleType)elementType;
         emit eletypeChanged(m_eletype);
     }
 }
@@ -136,4 +145,15 @@ void DataItem::setEnabled(bool enabled) {
         emit enabledChanged(m_enabled);
     }
 }
+
+bool DataItem::getStore() const
+{
+    return m_store;
+}
+
+void DataItem::setStore(bool store)
+{
+    m_store = store;
+}
+
 
