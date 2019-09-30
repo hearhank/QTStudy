@@ -7,39 +7,41 @@
 #include <QMap>
 
 #include "sqlitedbstore.hpp"
+#include "cacheitem.hpp"
 
 class DataCache : public QObject
 {
-    Q_OBJECT
+Q_OBJECT
 public:
-    explicit DataCache(QObject *parent = nullptr);
-    ~DataCache();
+explicit DataCache(QObject *parent = nullptr);
+~DataCache();
 
-    Q_INVOKABLE void load(const QString &group);
+Q_INVOKABLE void load(const QString &group);
 
-    Q_INVOKABLE void set(QString key, QVariant val, QString group);
+Q_INVOKABLE void set(QString key, QVariant val, QString group);
 
-    Q_INVOKABLE QVariant get(const QString &key, QVariant dval = QVariant(), const QString &group = "");
+Q_INVOKABLE QVariant get(const QString &key, QVariant dval = QVariant(), const QString &group = "");
 
-    QHash<QString, QVariant> getByGroup(const QString &group);
+QHash<QString, QVariant> getByGroup(const QString &group);
 
-    Q_INVOKABLE bool remove(const QString &key, const QString &group);
+Q_INVOKABLE bool remove(const QString &key, const QString &group);
 
-    Q_INVOKABLE bool removeGroup(const QString &group);
+Q_INVOKABLE bool removeGroup(const QString &group);
 
-    Q_INVOKABLE void print();
+Q_INVOKABLE void print();
 signals:
 
 public slots:
 
 private:
-    void AddCache(const QString &key, const CacheItem &item);
-    void Update(const QString &key, const QVariant val, const QString &group = "");
-    bool Contains(const QString &key, const QString &group);
-    QHash<QString, QHash<QString, CacheItem> > m_datas;
+void loadGroup(const QString& group, const QHash<QString, QVariant>& datas);
+void AddCache(const QString &key, const CacheItem &item);
+void Update(const QString &key, const QVariant val, const QString &group = "");
+bool Contains(const QString &key, const QString &group);
+QHash<QString, QHash<QString, CacheItem> > m_datas;
 
-    SqliteDBStore *m_store = nullptr;
-    bool m_load = false;
+SqliteDBStore m_store;
+bool m_load = false;
 
 };
 

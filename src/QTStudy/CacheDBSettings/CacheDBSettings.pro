@@ -1,4 +1,4 @@
-QT += quick sql
+QT += quick sql core
 CONFIG += c++11
 CONFIG -= app_bundle
 
@@ -18,7 +18,8 @@ SOURCES += \
         datacache.cpp \
         inisettingsstore.cpp \
         main.cpp \
-        sqlitedbstore.cpp
+        sqlitedbstore.cpp \
+        sqlitehelper.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -31,7 +32,8 @@ HEADERS += \
     datacache.hpp \
     inisettingsstore.hpp \
     singleton.hpp \
-    sqlitedbstore.hpp
+    sqlitedbstore.hpp \
+    sqlitehelper.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

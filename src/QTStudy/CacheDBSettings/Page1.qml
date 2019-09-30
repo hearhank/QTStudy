@@ -19,10 +19,16 @@ Page {
         Button {
             text: "Test"
             onClicked: {
-                Caches.set("interval", 100, "SYSTEM")
-                //                Caches.set("Name","SLminiMK3", "SLmini")
-                //                Caches.set("name1", input.text, "SYSTEM")
+
+                Caches.set("Name", "SLminiMK3", "SLmini")
+                Caches.set("Name", 100, "SLmini")
+                Caches.remove("Name", "SLminiMK3", "SLmini")
+                Caches.set("name1", input.text, "SYSTEM")
+                Caches.print()
             }
         }
+    }
+    Component.onCompleted: {
+
     }
 }
