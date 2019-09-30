@@ -13,11 +13,11 @@ class SqliteDBStore
 public:
     SqliteDBStore(const QString &dbname, const QString &pwd = "protonmdis");
 
-    QList<CacheItem> Load(const QString &group = "");
+    QHash<QString, QHash<QString, QVariant> > Load(const QString &group = "");
 
 
-    void Add(const CacheItem &item);
-    void Update(const CacheItem &item);
+    void Add(const QString &group, const QString &key, const QVariant &val);
+    void Update(const QString &group, const QString &key, const QVariant &val);
     void Delete(const QString &group, const QString &key);
     void Delete(const QString &group);
 
@@ -40,16 +40,17 @@ public:
 
 private:
     void Init();
+    QList<QString> getGroups();
     QString m_dbname;
     QString m_password;
     QSqlDatabase m_db;
 
     const QString checkTable = "SELECT COUNT(*) as RC FROM sqlite_master where "
-                               "type='table' and name='KeyValues'";
+                               "type='table' and name='key_values'";
     const QString createTable =
-        "CREATE TABLE KeyValues ([Group] varchar(50), [Key] varchar(50), "
-        "[Value] text, [Notes] nvarchar(100));";
-    const QString createIndex = "CREATE UNIQUE INDEX [Group_Key_Unique]ON KeyValues ([Group], [Key]);";
+        "CREATE TABLE key_values ([group] varchar(50), [key] varchar(50), "
+        "[value] text, [notes] nvarchar(100));";
+    const QString createIndex = "CREATE UNIQUE INDEX [group_key_unique]ON key_values ([group], [key]);";
 };
 
 #endif // SQLITEDBSTORE_HPP

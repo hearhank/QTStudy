@@ -2,33 +2,34 @@
 #define CACHEITEM_HPP
 
 #include <QObject>
+#include <QDebug>
 #include <QVariant>
 #include <QDateTime>
 
 class CacheItem
 {
 public:
-    explicit CacheItem(){
-    }
+    explicit CacheItem();
+    ~CacheItem();
     explicit CacheItem(const QString &key, const QVariant &Value, const QString &Group = "SYSTEM");
 
-    QVariant Value() const;
-    void setValue(const QVariant &Value);
+    QVariant value() const;
+    void setValue(const QVariant &value);
 
-    QString Group() const;
-    void setGroup(const QString &Group);
+    QString group() const;
+    void setGroup(const QString &group);
 
-    QString Notes() const;
-    void setNotes(const QString &Notes);
+    QString key() const;
+    void setKey(const QString &key);
 
-    QString Key() const;
-    void setKey(const QString &Key);
+    QString notes() const;
+    void setNotes(const QString &notes);
 
 private:
-    QVariant m_Value;
-    QString m_Group;
-    QString m_Key;
-    QString m_Notes;
+    QVariant m_value;
+    QString m_group;
+    QString m_key;
+    QString m_notes;
 };
 
 #endif // CACHEITEM_HPP

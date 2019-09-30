@@ -1,58 +1,57 @@
 #include "cacheitem.hpp"
 
+CacheItem::CacheItem()
+{
 
-//CacheItem CacheItem::operator=(const CacheItem &item) {
+}
 
-//    if (item.getFlag())
-//        return CacheItem(item.getValue(), item.getExpireTime());
-//    else
-//        return CacheItem(item.getValue());
-//}
-
+CacheItem::~CacheItem() {
+    qDebug() << "~CacheItem()";
+}
 
 CacheItem::CacheItem(const QString &key, const QVariant &Value,
                      const QString &Group) {
-    m_Value = Value;
-    m_Group = Group;
-    m_Key = key;
+    m_value = Value;
+    m_group = Group;
+    m_key = key;
 }
 
-QVariant CacheItem::Value() const
+QVariant CacheItem::value() const
 {
-    return m_Value;
+    return m_value;
 }
 
-void CacheItem::setValue(const QVariant &Value)
+void CacheItem::setValue(const QVariant &value)
 {
-    m_Value = Value;
+    m_value = value;
 }
 
-QString CacheItem::Group() const
+QString CacheItem::group() const
 {
-    return m_Group;
+    return m_group;
 }
 
-void CacheItem::setGroup(const QString &Group)
+void CacheItem::setGroup(const QString &group)
 {
-    m_Group = Group;
+    m_group = group;
 }
 
-QString CacheItem::Notes() const
+QString CacheItem::key() const
 {
-    return m_Notes;
+    return m_key;
 }
 
-void CacheItem::setNotes(const QString &Notes)
+void CacheItem::setKey(const QString &key)
 {
-    m_Notes = Notes;
+    m_key = key;
 }
 
-QString CacheItem::Key() const
+QString CacheItem::notes() const
 {
-    return m_Key;
+    return m_notes;
 }
 
-void CacheItem::setKey(const QString &Key)
+void CacheItem::setNotes(const QString &notes)
 {
-    m_Key = Key;
+    m_notes = notes;
 }

@@ -1,19 +1,35 @@
-#include <QCoreApplication>
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
+#include <QQmlEngine>
+#include <QJSEngine>
+
 #include "Helper.hpp"
+#include "datacache.hpp"
 
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication a(argc, argv);
-    Cache->Load("SLmini");
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
-    Cache->Set("Name", QDateTime::currentDateTime(), "SLmini");
-    Cache->Set("Name", "Rain", "DGK");
-    Cache->Set("Name", "Hank", "DGK");
+    QGuiApplication app(argc, argv);
 
-    qDebug() << Cache->Get("Name", "", "SLmini")->Value().toString();
-    qDebug() << Cache->Get("Name", "", "DGK")->Value().toString();
-    Cache->Print();
-    int r = a.exec();
-    return r;
+    qmlRegisterSingletonType<DataCache>("Proton.Datas", 1, 0, "Caches", [] (QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject*{
+        Q_UNUSED(engine)
+        Q_UNUSED(scriptEngine)
+        auto item = Singleton<DataCache>::Installace();
+        item->load("SLmini");
+        return item;
+    });
+
+
+    QQmlApplicationEngine engine;
+    const QUrl url(QStringLiteral("qrc:/main.qml"));
+    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
+                     &app, [url] (QObject *obj, const QUrl &objUrl) {
+        if (!obj && url == objUrl)
+            QCoreApplication::exit(-1);
+    }, Qt::QueuedConnection);
+    engine.load(url);
+
+    return app.exec();
 }

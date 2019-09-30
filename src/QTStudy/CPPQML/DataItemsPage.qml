@@ -68,6 +68,14 @@ Page {
         }
         highlight: Rectangle {
             color: "lightsteelblue"
+            Behavior on color {
+                ColorAnimation {
+                    from: "#fff"
+                    to: "#f00"
+                    duration: 200
+                    easing.type: Easing.InQuint
+                }
+            }
         }
         focus: true
         clip: true

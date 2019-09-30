@@ -8,45 +8,52 @@ SqliteDBStore::SqliteDBStore(const QString &dbname, const QString &pwd) {
     Init();
 }
 
-QList<CacheItem> SqliteDBStore::Load(const QString &group) {
-    QString sql = "SELECT * from [KeyValues]";
+QHash<QString, QHash<QString, QVariant> >
+SqliteDBStore::Load(const QString &group) {
+    QString sql = "SELECT * from [key_values]";
     QSqlQuery query;
     if (group != "") {
-        sql += " where [Group]=?";
-        query = Query(sql, QList<QVariant>{
-            group
-        });
+        sql += " where [group]=? ";
+        query = Query(sql, QList<QVariant>{group});
     } else {
+        sql += " order by [group]";
         query = Query(sql);
     }
-    QList<CacheItem> results;
-    while (query.next()) {
-        CacheItem item;
-        item.setGroup(query.value(0).toString());
-        item.setKey(query.value(1).toString());
-        item.setValue(query.value(2));
-        results.append(item);
+    QHash<QString, QHash<QString, QVariant> > datas;
+    if (group != "") {
+        QHash<QString, QVariant> results;
+        while (query.next()) {
+            results.insert(query.value(1).toString(), query.value(2));
+        }
+        datas.insert(group, results);
+    }else{
+        QHash<QString, QVariant> results;
+        while (query.next()) {
+            results.insert(query.value(1).toString(), query.value(2));
+        }
+        if(results.count() > 0) {
+            datas.insert(group, results);
+        }
     }
-    qDebug() << QT_MESSAGELOG_FILE << QT_MESSAGELOG_FUNC << "Load datas count:" << results.count();
-    return results;
+    return datas;
 }
 
-void SqliteDBStore::Add(const CacheItem &item)
+void SqliteDBStore::Add(const QString &group, const QString &key, const QVariant &val)
 {
     QList<QVariant> params;
-    params.append(item.Group());
-    params.append(item.Key());
-    params.append(item.Value());
-    Exec("INSERT into KeyValues([Group],[Key],[Value]) values(?,?,?)", params);
+    params.append(group);
+    params.append(key);
+    params.append(val);
+    Exec("INSERT into [key_values]([group],[key],[Value]) values(?,?,?)", params);
 }
 
-void SqliteDBStore::Update(const CacheItem &item)
+void SqliteDBStore::Update(const QString &group, const QString &key, const QVariant &val)
 {
     QList<QVariant> params;
-    params.append(item.Value());
-    params.append(item.Group());
-    params.append(item.Key());
-    Exec("UPDATE [KeyValues] SET [Value] = ? WHERE [Group] = ? and [Key] = ?", params);
+    params.append(val);
+    params.append(group);
+    params.append(key);
+    Exec("UPDATE [key_values] SET [value] = ? WHERE [group] = ? and [key] = ?", params);
 }
 
 void SqliteDBStore::Delete(const QString &group, const QString &key)
@@ -54,17 +61,15 @@ void SqliteDBStore::Delete(const QString &group, const QString &key)
     QList<QVariant> params;
     params.append(group );
     params.append(key);
-    Exec("DELETE [KeyValues] WHERE [Group] = ? and [Key] = ?", params);
+    Exec("DELETE FROM [key_values] WHERE [group] = ? and [key] = ?", params);
 }
 
 void SqliteDBStore::Delete(const QString &group)
 {
     QList<QVariant> params;
     params.append(group);
-    Exec("DELETE [KeyValues] WHERE [Group] = ? ", params);
+    Exec("DELETE [key_values] WHERE [group] = ? ", params);
 }
-
-
 
 bool SqliteDBStore::Open() {
     if (!m_db.isValid()) {
@@ -102,6 +107,8 @@ bool SqliteDBStore::Exec(const QString &sql, const QList<QVariant> &params) {
             flag = query.exec(sql);
         }
         if (!flag) {
+            qDebug() << sql;
+            qDebug() << params;
             qDebug() << query.lastError().text();
         } else {
             m_db.commit();
@@ -180,6 +187,15 @@ void SqliteDBStore::Init()
         }
         qDebug() << m_db.databaseName();
     }
+}
+
+QList<QString> SqliteDBStore::getGroups() {
+    QString sql = "SELECT distinct [group] FROM [key_values]";
+    QSqlQuery query = Query(sql);
+    while (query.next()) {
+
+    }
+
 }
 
 

@@ -13,39 +13,33 @@ class DataCache : public QObject
     Q_OBJECT
 public:
     explicit DataCache(QObject *parent = nullptr);
+    ~DataCache();
 
-    void Load(const QString &dgroup);
+    Q_INVOKABLE void load(const QString &group);
 
-    void Set(const QString &key, const QVariant val, const QString &group = "");
+    Q_INVOKABLE void set(QString key, QVariant val, QString group);
 
-    CacheItem* Get(const QString &key, QVariant dval = QVariant(), const QString &group = "");
-    QList<CacheItem> GetByGroup(const QString &group);
+    Q_INVOKABLE QVariant get(const QString &key, QVariant dval = QVariant(), const QString &group = "");
 
-    void Update(const QString &key, const QVariant val, const QString &group = "");
+    QHash<QString, QVariant> getByGroup(const QString &group);
 
-    bool Remove(const QString &key, const QString &group);
+    Q_INVOKABLE bool remove(const QString &key, const QString &group);
 
-    bool RemoveGroup(const QString &group);
+    Q_INVOKABLE bool removeGroup(const QString &group);
 
-//    void SaveToFile(const QString &path);
-
-//    void LoadFromFile(const QString &path);
-
-    void Print();
-
+    Q_INVOKABLE void print();
 signals:
 
 public slots:
 
 private:
     void AddCache(const QString &key, const CacheItem &item);
+    void Update(const QString &key, const QVariant val, const QString &group = "");
     bool Contains(const QString &key, const QString &group);
     QHash<QString, QHash<QString, CacheItem> > m_datas;
-    ~DataCache();
-    QString m_LastFile;
-    QString m_group;
 
     SqliteDBStore *m_store = nullptr;
+    bool m_load = false;
 
 };
 
