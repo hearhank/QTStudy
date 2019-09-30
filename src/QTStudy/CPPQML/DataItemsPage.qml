@@ -5,12 +5,21 @@ import Proton.Datas 1.0
 
 Page {
     DataItems {
-        id: binding_datas
+        id: hidden_datas
+        name: "hidden_datas"
         datas: [
             DataItem {
                 name: "Count"
                 value: 10
-            },
+                onValueChanged: console.log(value)
+            }
+        ]
+    }
+
+    DataItems {
+        id: binding_datas
+        name: "binding_datas"
+        datas: [
             DataItem {
                 name: "On/Off"
                 value: 1
@@ -90,7 +99,9 @@ Page {
     }
 
     Component.onCompleted: {
-        operator.start(binding_datas)
+        operator.setDataItems(hidden_datas)
+        operator.setDataItems(binding_datas)
+        operator.start()
     }
 }
 

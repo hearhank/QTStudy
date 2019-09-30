@@ -53,14 +53,20 @@ bool SQLiteHelper::Exist(const QString& name) {
 
 bool SQLiteHelper::Open() {
   QMutexLocker lock(&m_mutex);
-
   if (!m_db.isValid()) {
     qDebug() << QSqlDatabase::drivers();
-    m_db = QSqlDatabase::addDatabase("QSQLITE", "defautl_connection");
+    m_db = QSqlDatabase::addDatabase("QSQLITE", m_dbName);
     m_db.setDatabaseName(m_dbName);
+    m_db.setHostName("Localhost");
+    m_db.setPort(20);
   }
   if (!m_db.isOpen()) {
-    return m_db.open();
+    if (!m_db.open("", m_password)) {
+      QString errmsg = m_db.lastError().text();
+      m_db = QSqlDatabase();
+      QSqlDatabase::removeDatabase(m_dbName);
+      emit onFailed(errmsg);
+    }
   }
   return true;
 }

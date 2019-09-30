@@ -1,28 +1,27 @@
 #include "pageoperationtimer.hpp"
 
-PageOperationTimer::PageOperationTimer(QObject *parent) : QObject(parent),
-    m_items(nullptr),
-    m_interval(500)
-{
-}
+PageOperationTimer::PageOperationTimer(QObject* parent)
+    : QObject(parent), m_items(), m_interval(500) {}
 
 PageOperationTimer::~PageOperationTimer() {
     stop();
     qDebug() << "~Page Operation Timer";
 }
 
-void PageOperationTimer::start(DataItems *items) {
-    qDebug() << items->count();
-    m_items = items;
-    m_items->Load();
-    connect(&m_timer, &QTimer::timeout, this, &PageOperationTimer::runSync);
-    m_timer.start(m_interval);
+void PageOperationTimer::setDataItems(DataItems* items) {
+  if (!m_items.contains(items->name()))
+    m_items.insert(items->name(), items);
 }
 
+void PageOperationTimer::start() {
+  foreach (auto item, m_items.values()) { item->Load(); }
+  connect(&m_timer, &QTimer::timeout, this, &PageOperationTimer::runSync);
+  m_timer.start(m_interval);
+}
 
 void PageOperationTimer::stop() {
-    m_timer.stop();
-    disconnect(&m_timer, &QTimer::timeout, this, &PageOperationTimer::runSync);
+  m_timer.stop();
+  disconnect(&m_timer, &QTimer::timeout, this, &PageOperationTimer::runSync);
 }
 
 void PageOperationTimer::runSync() {
@@ -33,8 +32,10 @@ void PageOperationTimer::runSync() {
 
 void PageOperationTimer::doRead() {
     QMutexLocker lock(&m_mutex);
-    foreach (auto item, m_items->items()) {
+    foreach (auto group, m_items.values()) {
+      foreach (auto item, group->items()) {
         item->setValue(ReadDataItem(item));
+      }
     }
 }
 

@@ -22,7 +22,7 @@ QVariant Scalar(const QString& sql, const QVariantList params=QVariantList());
 QSqlQuery Query(const QString& sql, const QVariantList params=QVariantList());
 bool Exist(const QString& name);
 signals:
-
+void onFailed(const QString& msg);
 public slots:
 private:
 bool Open();

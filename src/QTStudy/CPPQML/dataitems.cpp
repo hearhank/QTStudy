@@ -5,12 +5,12 @@ DataItems::DataItems(QObject *parent) : QObject(parent)
 
 }
 DataItems::~DataItems(){
-    //    qDeleteAll(m_items);
-    qDebug() << "~DataItems()";
+  //    qDeleteAll(m_items);
+  qDebug() << "~DataItems()";
 }
 
 QQmlListProperty<DataItem> DataItems::datas(){
-    return QQmlListProperty<DataItem>(this, m_items);
+  return QQmlListProperty<DataItem>(this, m_items);
 //,
 //                                      &DataItems::add,
 //                                      &DataItems::count,
@@ -19,66 +19,76 @@ QQmlListProperty<DataItem> DataItems::datas(){
 }
 
 void DataItems::add(DataItem *item) {
-    m_items.append(item);
-    emit datasChanged(m_items.count());
+  m_items.append(item);
+  emit datasChanged(m_items.count());
 }
 
 int DataItems::count()  {
-    return m_items.size();
+  return m_items.size();
 }
 
 DataItem * DataItems::at(int index) const {
-    if(index >= 0 && m_items.count() > index) {
-        return m_items.at(index);
-    }else{
-        return nullptr;
-    }
+  if(index >= 0 && m_items.count() > index) {
+    return m_items.at(index);
+  }else{
+    return nullptr;
+  }
 }
 
 void DataItems::clear(){
-    m_items.clear();
-    emit datasChanged(0);
+  m_items.clear();
+  emit datasChanged(0);
 }
 
 DataItem *DataItems::getStore(const QString &name) {
-    return Singleton<AppStores>::getInstance().getDataItem(name);
+  return Singleton<AppStores>::getInstance().getDataItem(name);
 }
 
 void DataItems::add(QQmlListProperty<DataItem>* list, DataItem *item)
 {
-    reinterpret_cast<DataItems*>(list->data)->add(item);
+  reinterpret_cast<DataItems*>(list->data)->add(item);
 }
 
 void DataItems::clear(QQmlListProperty<DataItem> *list)
 {
-    reinterpret_cast<DataItems*>(list->data)->clear();
+  reinterpret_cast<DataItems*>(list->data)->clear();
+}
+
+QString DataItems::name() const
+{
+  return m_name;
+}
+
+void DataItems::setName(const QString &name)
+{
+  m_name = name;
 }
 
 QList<DataItem *> DataItems::items()
 {
-    return m_items;
+  return m_items;
 }
 
 void DataItems::Load() {
-    if (m_items.count() == 0)
-        return;
-    foreach (auto item, m_items) {
-        if (!item->isLoad()) {
-            item->Load(m_items);
-        }
+  if (m_items.count() == 0)
+    return;
+  foreach (auto item, m_items) {
+    if (!item->isLoad()) {
+      item->Load(m_items);
+    }
 //        if (item->getStore()) {
 //            Singleton<AppStores>::getInstance().addDataItem(item);
 //            qDebug() << item->parent();
 //        }
-    }
+  }
 }
 
 DataItem* DataItems::at(QQmlListProperty<DataItem> *list, int index)
 {
-    return reinterpret_cast<DataItems*>(list->data)->at(index);
+  return reinterpret_cast<DataItems*>(list->data)->at(index);
 }
 
 int DataItems::count(QQmlListProperty<DataItem> *list)
 {
-    return reinterpret_cast<DataItems*>(list->data)->count();
+  return reinterpret_cast<DataItems*>(list->data)->count();
 }

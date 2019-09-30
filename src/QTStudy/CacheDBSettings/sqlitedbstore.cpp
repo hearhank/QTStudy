@@ -57,11 +57,11 @@ void SqliteDBStore::Delete(const QString &group, const QString &key)
 
 void SqliteDBStore::Delete(const QString &group)
 {
-  m_helper.Execute("DELETE [key_values] WHERE [group] = ? ", QVariantList{group});
+  m_helper.Execute("DELETE FROM [key_values] WHERE [group] = ? ", QVariantList{group});
 }
 
 QHash<QString, QVariant> SqliteDBStore::loadGroup(const QString& group) {
-  QString sql = "SELECT * from [key_values] where [group]=?";
+  QString sql = "SELECT * FROM [key_values] where [group]=?";
   QHash<QString, QVariant> datas;
 
   QSqlQuery query = m_helper.Query(sql, QVariantList{group});
