@@ -1,6 +1,5 @@
-QT += quick sql core
-CONFIG += c++11 console
-CONFIG -= app_bundle
+QT += quick sql
+CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
@@ -19,7 +18,9 @@ SOURCES += \
         inisettingsstore.cpp \
         main.cpp \
         sqlitedbstore.cpp \
-        sqlitehelper.cpp
+        sqlitehelper.cpp \
+    logmessage.cpp \
+    log.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -32,7 +33,9 @@ HEADERS += \
     inisettingsstore.hpp \
     singleton.hpp \
     sqlitedbstore.hpp \
-    sqlitehelper.hpp
+    sqlitehelper.hpp \
+    logmessage.hpp \
+    log.hpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

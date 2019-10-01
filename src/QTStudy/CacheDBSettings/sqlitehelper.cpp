@@ -1,4 +1,4 @@
-#include "sqlitehelper.h"
+#include "sqlitehelper.hpp"
 
 
 SQLiteHelper::SQLiteHelper(const QString& dbname, const QString& pwd,

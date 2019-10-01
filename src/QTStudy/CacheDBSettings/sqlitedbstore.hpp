@@ -6,7 +6,7 @@
 #include <QtDebug>
 #include <QObject>
 
-#include "sqlitehelper.h"
+#include "sqlitehelper.hpp"
 
 class SqliteDBStore : public QObject
 {
