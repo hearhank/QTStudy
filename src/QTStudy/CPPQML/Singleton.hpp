@@ -1,11 +1,10 @@
 #ifndef SINGLETON_HPP
 #define SINGLETON_HPP
 #include <QMutexLocker>
+#include <QObject>
 #include <QScopedPointer>
 
-
-template <class T>
-class Singleton {
+template <class T> class Singleton {
 public:
     template <typename ... Args> static T& Instance(Args... args) {
         if (m_instance.isNull()) {
@@ -27,8 +26,13 @@ public:
     }
     //TODO
     static void DestroyInstall() {
-        //delete m_instance;
-        m_instance = nullptr;
+      QObject* instance = static_cast<QObject*>(m_instance.data());
+      if (instance != nullptr) {
+        instance->deleteLater();
+      } else {
+        delete m_instance.data();
+      }
+      m_instance = nullptr;
     }
 
 private:
@@ -38,7 +42,6 @@ private:
 
     Singleton  &operator=(const Singleton  &);
 
-    //    static T* m_instance;
     static QScopedPointer<T> m_instance;
     static QMutex m_mutex;
 };

@@ -1,9 +1,10 @@
 #ifndef CONVERTSERVERS_HPP
 #define CONVERTSERVERS_HPP
 
-#include <QObject>
-#include "nameconvert.hpp"
 #include "EnumTypes.hpp"
+#include "nameconvert.hpp"
+#include <QDebug>
+#include <QObject>
 
 class ConvertServers : public QObject
 {

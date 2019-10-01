@@ -1,15 +1,14 @@
+#include <QDebug>
 #include <QGuiApplication>
+#include <QJSEngine>
+#include <QObject>
 #include <QQmlApplicationEngine>
 #include <QQmlEngine>
-#include <QJSEngine>
-#include <QDebug>
 
-#include "Helper.hpp"
 #include "datacache.hpp"
+#include "singleton.hpp"
 
-
-int main(int argc, char *argv[])
-{
+int main(int argc, char* argv[]) {
   QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
   QGuiApplication app(argc, argv);
@@ -18,7 +17,7 @@ int main(int argc, char *argv[])
     Q_UNUSED(engine)
     Q_UNUSED(scriptEngine)
     auto item = Singleton<DataCache>::Installace();
-    item->load("");
+    item->load();
     item->print();
     return item;
   });
@@ -33,5 +32,7 @@ int main(int argc, char *argv[])
   }, Qt::QueuedConnection);
   engine.load(url);
 
+  // QObject::connect(&app, &QGuiApplication::lastWindowClosed,
+  // &helper,&Helper::unload);
   return app.exec();
 }

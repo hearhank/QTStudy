@@ -6,11 +6,12 @@ ConvertServers::ConvertServers(QObject *parent) : QObject(parent)
 }
 
 ConvertServers::~ConvertServers() {
-    QHashIterator<CH::DataConverter, QObject *> i(m_Services);
-    while (i.hasNext()) {
-        i.next().value()->deleteLater();
-    }
-    m_Services.clear();
+  qDebug() << "~ConvertServers";
+  QHashIterator<CH::DataConverter, QObject*> i(m_Services);
+  while (i.hasNext()) {
+    i.next().value()->deleteLater();
+  }
+  m_Services.clear();
 }
 
 void ConvertServers::Register(CH::DataConverter type,

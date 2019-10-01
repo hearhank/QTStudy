@@ -1,5 +1,5 @@
 QT += quick sql core
-CONFIG += c++11
+CONFIG += c++11 console
 CONFIG -= app_bundle
 
 # The following define makes your compiler emit warnings if you use
@@ -27,13 +27,12 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    Helper.hpp \
     cacheitem.hpp \
     datacache.hpp \
     inisettingsstore.hpp \
     singleton.hpp \
     sqlitedbstore.hpp \
-    sqlitehelper.h
+    sqlitehelper.hpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

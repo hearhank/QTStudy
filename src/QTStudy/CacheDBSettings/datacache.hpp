@@ -16,7 +16,7 @@ public:
 explicit DataCache(QObject *parent = nullptr);
 ~DataCache();
 
-Q_INVOKABLE void load(const QString &group);
+Q_INVOKABLE void load(const QString& group = "");
 
 Q_INVOKABLE void set(QString key, QVariant val, QString group);
 
