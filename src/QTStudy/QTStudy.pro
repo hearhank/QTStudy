@@ -2,4 +2,5 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     CPPQML \
-    CacheDBSettings
+    CacheDBSettings \
+    ChartShow
