@@ -3,4 +3,5 @@ TEMPLATE = subdirs
 SUBDIRS += \
     CPPQML \
     CacheDBSettings \
-    ChartShow
+    ChartShow \
+    ModbusCommunication
