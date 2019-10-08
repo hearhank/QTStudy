@@ -1,4 +1,4 @@
-import QtQuick 2.12
+import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
 import QtCharts 2.0
@@ -22,19 +22,19 @@ Page {
             }
         ]
     }
-    DataItems{
-        id:refLines_datas
+    DataItems {
+        id: refLines_datas
         datas: [
-            DataItem{
-                name:"Upper Limit"
+            DataItem {
+                name: "Upper Limit"
                 value: 15
             },
-            DataItem{
-                name:"Middle Limit"
+            DataItem {
+                name: "Middle Limit"
                 value: 5
             },
-            DataItem{
-                name:"Lower Limit"
+            DataItem {
+                name: "Lower Limit"
                 value: 0
             }
         ]
@@ -43,101 +43,104 @@ Page {
         id: column
         anchors.fill: parent
         spacing: 0
-        CustomLegend{
+        CustomLegend {
             width: parent.width
             height: 50
             title: "Wheel of fortune"
             anchors.horizontalCenter: parent.horizontalCenter
-            id:customLegend
+            id: customLegend
         }
 
         ChartView {
             id: chartView
             width: parent.width
-            height: parent.height-customLegend.height
+            height: parent.height - customLegend.height
             legend.visible: false
             antialiasing: true
             onSeriesAdded: {
-                if(series.name!=="")
-                    customLegend.addSeries(series.name,series.color)
+                if (series.name !== "")
+                    customLegend.addSeries(series.name, series.color)
             }
 
-            DateTimeAxis{
-                id:dxAxis
+            DateTimeAxis {
+                id: dxAxis
                 titleText: "Date Time"
                 format: "HH:mm:ss"
+                tickCount: 10
             }
-//            SplineSeries{
-//                color: "red"
-//                useOpenGL: true
-//                capStyle: Qt.DashDotLine
-//            }
-       }
+            //            SplineSeries{
+            //                color: "red"
+            //                useOpenGL: true
+            //                capStyle: Qt.DashDotLine
+            //            }
+        }
     }
-    function createSeries(name,ischange) {
+    function createSeries(name, ischange) {
         var yAxis = Qt.createQmlObject('import QtCharts 2.0;ValueAxis{}',
                                        chartView)
         yAxis.titleText = name
 
-        var newSeries = chartView.createSeries(ChartView.SeriesTypeLine, name,dxAxis,yAxis)
-        newSeries.useOpenGL= true
-        if(ischange)
+        var newSeries = chartView.createSeries(ChartView.SeriesTypeLine, name,
+                                               dxAxis, yAxis)
+        newSeries.useOpenGL = true
+        if (ischange)
             trendingTimer.change(newSeries, yAxis)
     }
 
-    function createRefes(name,val,flag)
-    {
-        var yAxis = Qt.createQmlObject('import QtCharts 2.0;ValueAxis{min:0;max:1;visible:false}',
-                                       chartView)
-        var xAxis = Qt.createQmlObject('import QtCharts 2.0;ValueAxis{min:0;max:1;visible:false}',
-                                       chartView)
+    function createRefes(name, val, flag) {
+        var yAxis = Qt.createQmlObject(
+                    'import QtCharts 2.0;ValueAxis{min:0;max:1;visible:false}',
+                    chartView)
+        var xAxis = Qt.createQmlObject(
+                    'import QtCharts 2.0;ValueAxis{min:0;max:1;visible:false}',
+                    chartView)
 
-        var newSeries = chartView.createSeries(ChartView.SeriesTypeLine, "",xAxis,yAxis)
-        newSeries.append(0,val)
-        newSeries.append(1,val)
-        newSeries.useOpenGL= true
-        if(flag){
-            newSeries.color="black"
-        }else{
-            newSeries.color="red"
-            newSeries.style=Qt.DashDotLine
+        var newSeries = chartView.createSeries(ChartView.SeriesTypeLine, "",
+                                               xAxis, yAxis)
+        newSeries.append(0, val)
+        newSeries.append(1, val)
+        newSeries.useOpenGL = true
+        if (flag) {
+            newSeries.color = "black"
+        } else {
+            newSeries.color = "red"
+            newSeries.style = Qt.DashDotLine
         }
     }
 
     TrendingTimer {
         id: trendingTimer
-        interval: 200
-        timeLength: 5
+        interval: 100
+        timeLength: 10
         onLoad: {
-            var i=0;
-            for(;i<datas.length;i++){
-                if(flag>0){
-                    createRefes(datas[i],(i+1)*0.25,i===1);
-                }else{
-                    createSeries(datas[i],i>0)
+            var i = 0
+            for (; i < datas.length; i++) {
+                if (flag > 0) {
+                    createRefes(datas[i], (i + 1) * 0.25, i === 1)
+                } else {
+                    createSeries(datas[i], i > 0)
                 }
             }
         }
-        onRefsUpdate:
-        {
+        onRefsUpdate: {
             var i = 0
             for (; i < datas.length; i++) {
-              var item = chartView.series(i)
-              item.removePoints(0,2)
-              item.append(0, datas[i])
-              item.append(1, datas[i])
+                var item = chartView.series(i)
+                item.removePoints(0, 2)
+                item.append(0, datas[i])
+                item.append(1, datas[i])
             }
         }
 
         onDataUpdate: {
             var i = 0
             for (; i < datas.length; i++) {
-              var item = chartView.series(i+3)
-              item.append(xTime, datas[i])
+                var item = chartView.series(i + 3)
+                item.append(xTime, datas[i])
             }
             i = 0
             for (; i < datas.length; i++) {
-                trendingTimer.setRange(chartView.series(i+3))
+                trendingTimer.setRange(chartView.series(i + 3))
             }
         }
     }
