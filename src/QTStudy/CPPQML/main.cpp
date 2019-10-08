@@ -1,13 +1,14 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 
-#include "dataitem.hpp"
-#include "dataitems.hpp"
+#include "datanode.hpp"
+#include "datanodes.hpp"
 #include "EnumTypes.hpp"
 #include "convertservers.hpp"
 #include "Singleton.hpp"
 #include "nameconvert.hpp"
 #include "datadesc.hpp"
+#include "datacalc.hpp"
 #include "modbusconvert.hpp"
 #include "pagestoreoperationtimer.hpp"
 #include "pageoperationtimer.hpp"
@@ -24,8 +25,9 @@ int main(int argc, char *argv[])
                                                       new ModbusConvert());
 
     qmlRegisterType<DataDesc>("Proton.Datas", 1, 0, "DataDesc");
-    qmlRegisterType<DataItem>("Proton.Datas", 1, 0, "DataItem");
-    qmlRegisterType<DataItems>("Proton.Datas", 1, 0, "DataItems");
+    qmlRegisterType<DataCalc>("Proton.Datas", 1, 0, "DataCalc");
+    qmlRegisterType<DataNode>("Proton.Datas", 1, 0, "DataNode");
+    qmlRegisterType<DataNodes>("Proton.Datas", 1, 0, "DataNodes");
     qmlRegisterType<PageOperationTimer>("Proton.Datas", 1, 0,
                                         "PageOperationTimer");
 

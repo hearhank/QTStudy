@@ -34,7 +34,7 @@ public:
         String
     };
     Q_ENUM(DataType)
-    enum DataArea { Input, Hold };
+    enum DataArea { Input, Hold, Local };
     Q_ENUM(DataArea)
 
     int offset() const;

@@ -7,5 +7,6 @@
         <file>qtquickcontrols2.conf</file>
         <file>DataItemsPage.qml</file>
         <file>PhoneItemDelegate.qml</file>
+        <file>GroupSettings.qml</file>
     </qresource>
 </RCC>

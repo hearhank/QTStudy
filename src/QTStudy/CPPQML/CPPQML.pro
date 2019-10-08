@@ -16,9 +16,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         appstores.cpp \
         convertservers.cpp \
+        datacalc.cpp \
         datadesc.cpp \
-        dataitem.cpp \
-        dataitems.cpp \
+        datanode.cpp \
+        datanodes.cpp \
         main.cpp \
         modbusconvert.cpp \
         nameconvert.cpp \
@@ -42,9 +43,10 @@ HEADERS += \
     Singleton.hpp \
     appstores.hpp \
     convertservers.hpp \
+    datacalc.hpp \
     datadesc.hpp \
-    dataitem.hpp \
-    dataitems.hpp \
+    datanode.hpp \
+    datanodes.hpp \
     modbusconvert.hpp \
     nameconvert.hpp \
     pageoperationtimer.hpp

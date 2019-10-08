@@ -6,12 +6,20 @@ import Proton.Datas 1.0
 
 ItemDelegate {
     id: phoneDelegate
-    signal itemClicked(var index)
+    signal itemClicked(var childIndex)
     signal switchChanged(var ele)
     signal itemButtonClicked(var ele)
     property bool isItemReadOnly: false
     Item {
         anchors.fill: parent
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                console.log(index)
+                itemClicked(index)
+            }
+        }
+
         RowLayout {
             width: parent.width
             height: parent.height
@@ -21,7 +29,7 @@ ItemDelegate {
                 id: lblTitle
                 anchors.left: parent.left
                 anchors.leftMargin: 10
-                text: model.name
+                text: name
                 font.pixelSize: 16
                 font.bold: true
                 height: parent.height
@@ -43,42 +51,50 @@ ItemDelegate {
                 anchors.right: parent.right
                 anchors.rightMargin: 10
 
-                //                Button {
-                //                    visible: model.elementType == CH.Button
-                //                    text: model.valueM
-                //                    onClicked: itemButtonClicked(model)
-                //                    Layout.minimumWidth: 150
-                //                }
-                Label {
-                    //                    visible: !(type == 1 || type == 6)
-                    //                    text: model.preValue !== undefined ? (model.preValue
-                    //                                                          + model.valueM) : model.valueM
-                    //                    visible: type === 0
-                    height: parent.height
-                    font.pixelSize: 16
+                Button {
+                    visible: model.pControlType === DataNode.Button
                     text: model.value
-                    enabled: false
-                    verticalAlignment: Text.AlignVCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    //                    color: parent.getColor()
-                    //                    echoMode: type == 5 ? TextInput.Password : TextInput.Normal
+                    onClicked: itemButtonClicked(model)
+                    Layout.minimumWidth: 150
                 }
-
-                //                Label {
-                //                    //                    visible: model.elementType !== CH.SWitchButton
-                //                    text: model.unit
-                //                    font.pixelSize: 16
-                //                    height: parent.height
-                //                    verticalAlignment: Text.AlignVCenter
-                //                    //                    color: (model.isDisabled !== undefined
-                //                    //                            && isDisabled) ? "#ccc" : "black"
-                //                }
                 RowLayout {
-                    visible: model.getEletype == 1
+                    anchors.right: parent.right
+                    visible: model.pControlType === DataNode.Label
+                    implicitWidth: lblValue.width + lblUnit.width + 10
+                    height: parent.height
+                    Label {
+
+                        //                    visible: !(type == 1 || type == 6)
+                        //                    text: model.preValue !== undefined ? (model.preValue
+                        //                                                          + model.valueM) : model.valueM
+                        id: lblValue
+                        height: parent.height
+                        font.pixelSize: 16
+                        text: model.value
+                        enabled: false
+                        verticalAlignment: Text.AlignRight
+                        anchors.verticalCenter: parent.verticalCenter
+                        //                    color: parent.getColor()
+                        //                    echoMode: type == 5 ? TextInput.Password : TextInput.Normal
+                    }
+                    Label {
+                        visible: model.elementType !== CH.SWitchButton
+                        id: lblUnit
+                        text: unit
+                        font.pixelSize: 16
+                        height: parent.height
+                        verticalAlignment: Text.AlignVCenter
+                        //                    color: (model.isDisabled !== undefined
+                        //                            && isDisabled) ? "#ccc" : "black"
+                    }
+                }
+                RowLayout {
                     //enabled: !isItemReadOnly
-                    width: 120
+                    implicitWidth: switchButton.width + 10
                     height: parent.height
                     SwitchDelegate {
+                        id: switchButton
+                        visible: model.pControlType === DataNode.SWitchButton
                         checked: Number(model.value) === 1
                         onClicked: {
                             model.value = checked ? "1" : "0"
@@ -108,14 +124,6 @@ ItemDelegate {
             height: 1
             width: parent.width
             anchors.top: parent.top
-        }
-
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                console.log(index)
-                itemClicked(index)
-            }
         }
     }
 }

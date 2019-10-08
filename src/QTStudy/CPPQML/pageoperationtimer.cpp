@@ -1,27 +1,30 @@
 #include "pageoperationtimer.hpp"
 
 PageOperationTimer::PageOperationTimer(QObject* parent)
-    : QObject(parent), m_items(), m_interval(500) {}
+    : QObject(parent), m_items(), m_interval(500) {
+}
 
 PageOperationTimer::~PageOperationTimer() {
     stop();
     qDebug() << "~Page Operation Timer";
 }
 
-void PageOperationTimer::setDataItems(DataItems* items) {
-  if (!m_items.contains(items->name()))
-    m_items.insert(items->name(), items);
+void PageOperationTimer::setDataItems(DataNodes* items) {
+    if (!m_items.contains(items->name()))
+        m_items.insert(items->name(), items);
 }
 
 void PageOperationTimer::start() {
-  foreach (auto item, m_items.values()) { item->Load(); }
-  connect(&m_timer, &QTimer::timeout, this, &PageOperationTimer::runSync);
-  m_timer.start(m_interval);
+    foreach (auto item, m_items.values()) {
+        item->Load();
+    }
+    connect(&m_timer, &QTimer::timeout, this, &PageOperationTimer::runSync);
+    m_timer.start(m_interval);
 }
 
 void PageOperationTimer::stop() {
-  m_timer.stop();
-  disconnect(&m_timer, &QTimer::timeout, this, &PageOperationTimer::runSync);
+    m_timer.stop();
+    disconnect(&m_timer, &QTimer::timeout, this, &PageOperationTimer::runSync);
 }
 
 void PageOperationTimer::runSync() {
@@ -33,21 +36,22 @@ void PageOperationTimer::runSync() {
 void PageOperationTimer::doRead() {
     QMutexLocker lock(&m_mutex);
     foreach (auto group, m_items.values()) {
-      foreach (auto item, group->items()) {
-        item->setValue(ReadDataItem(item));
-      }
+        foreach (auto item, group->nodeList()) {
+            item->setValue(ReadDataItem(item));
+        }
     }
 }
 
 
-QVariant PageOperationTimer::ReadDataItem(const DataItem *item) {
+QVariant PageOperationTimer::ReadDataItem(const DataNode *item) {
     //TODO
-    int r = item->value().toInt();
-    r += 1;
-    return r;
+    //    int r = item->value().toInt();
+    //    r += 1;
+    //    return r;
+    return item->value();
 }
 
-void PageOperationTimer::WriteDataItem(const DataItem *item,
+void PageOperationTimer::WriteDataItem(const DataNode *item,
                                        const QVariant &val) {
     qDebug() << "Write on " << item->name() << " with value " << val;
 }

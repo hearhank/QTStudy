@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QMutexLocker>
-#include "dataitem.hpp"
+#include "datanode.hpp"
 
 class AppStores : public QObject
 {
@@ -11,15 +11,15 @@ class AppStores : public QObject
 public:
     explicit AppStores(QObject *parent = nullptr);
     ~AppStores();
-    void addDataItem(DataItem *item);
-    DataItem *getDataItem(const QString &name) const;
-    QList<DataItem *> getDataItems() const;
+    void addDataItem(DataNode *item);
+    DataNode *getDataItem(const QString &name) const;
+    QList<DataNode *> getDataItems() const;
     void Load();
 signals:
 
 public slots:
 private:
-    QHash<QString, DataItem *> m_items;
+    QHash<QString, DataNode *> m_items;
     QMutex m_mutex;
 
 };

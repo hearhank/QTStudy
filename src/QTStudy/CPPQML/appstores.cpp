@@ -10,7 +10,7 @@ AppStores::~AppStores() {
     qDebug() << "~AppStores()";
 }
 
-void AppStores::addDataItem(DataItem *item) {
+void AppStores::addDataItem(DataNode *item) {
     QMutexLocker lock(&m_mutex);
     if (!m_items.contains(item->name())) {
         item->setParent(this);
@@ -18,13 +18,13 @@ void AppStores::addDataItem(DataItem *item) {
     }
 }
 
-DataItem *AppStores::getDataItem(const QString &name) const {
+DataNode *AppStores::getDataItem(const QString &name) const {
     if (m_items.contains(name))
         return m_items[name];
     return nullptr;
 }
 
-QList<DataItem*> AppStores::getDataItems() const {
+QList<DataNode*> AppStores::getDataItems() const {
     return m_items.values();
 }
 

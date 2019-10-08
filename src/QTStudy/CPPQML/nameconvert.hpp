@@ -2,14 +2,14 @@
 #define NAMECONVERT_HPP
 
 #include <QObject>
-#include <dataitem.hpp>
+#include <datanode.hpp>
 
 class NameConvert : public QObject
 {
     Q_OBJECT
 public:
     explicit NameConvert(QObject *parent = nullptr);
-    QVariant Convert(const QList<DataItem *> datas);
+    QVariant Convert(const QList<DataNode *> datas);
 signals:
 
 public slots:
