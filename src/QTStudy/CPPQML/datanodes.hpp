@@ -2,7 +2,6 @@
 #define DATAITEMS_HPP
 
 #include "Singleton.hpp"
-#include "appstores.hpp"
 #include "convertservers.hpp"
 #include "datanode.hpp"
 #include "modbusconvert.hpp"
@@ -27,9 +26,9 @@ public:
     void clear();
     QList<DataNode *> nodeList();
 
-    void Load();
+    void Load(QHash<QString, DataNode*> nodes);
 
-    Q_INVOKABLE DataNode *getStore(const QString &name);
+    //    Q_INVOKABLE DataNode *getStore(const QString &name);
     QString name() const;
     void setName(const QString &name);
 
@@ -41,12 +40,13 @@ public slots:
     //    void update();
 
 private:
-    static void add(QQmlListProperty<DataNode> *list, DataNode *at);
-    static int count(QQmlListProperty<DataNode> *list);
-    static DataNode *at(QQmlListProperty<DataNode> *list, int index);
-    static void clear(QQmlListProperty<DataNode> *list);
-    QList<DataNode *> m_nodes;
-    QString m_name;
+  void load(QList<DataNode*> nodes);
+  static void add(QQmlListProperty<DataNode>* list, DataNode* at);
+  static int count(QQmlListProperty<DataNode>* list);
+  static DataNode* at(QQmlListProperty<DataNode>* list, int index);
+  static void clear(QQmlListProperty<DataNode>* list);
+  QList<DataNode*> m_nodes;
+  QString m_name;
 };
 
 #endif // DATAITEMS_HPP

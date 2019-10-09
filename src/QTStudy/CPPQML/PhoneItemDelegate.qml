@@ -20,100 +20,105 @@ ItemDelegate {
             }
         }
 
-        RowLayout {
-            width: parent.width
-            height: parent.height
-
+        Grid {
+            id: grid
+            anchors.fill:parent
+            columns: 2
+            rows: 1
+            spacing: 0
             //标题
             Label {
                 id: lblTitle
-                anchors.left: parent.left
-                anchors.leftMargin: 10
                 text: name
+                leftPadding: 10
                 font.pixelSize: 16
                 font.bold: true
                 height: parent.height
                 verticalAlignment: Text.AlignVCenter
-                //                color: (model.isDisabled !== undefined
-                //                        && isDisabled) ? "#ccc" : "black"
             }
 
-            RowLayout {
-                //                function getColor() {
-                //                    if (model.fColor !== undefined) {
-                //                        return model.fColor
-                //                    } else {
-                //                        return (model.isDisabled !== undefined
-                //                                && isDisabled) ? "#ccc" : "#0070c9"
-                //                    }
-                //                }
+            Item {
+                id: element
+                width: parent.width-lblTitle.width
                 height: parent.height
-                anchors.right: parent.right
-                anchors.rightMargin: 10
-
-                Button {
+                Layout.margins: 0
+                RowLayout {
+                    anchors.right: editFlag.left
                     visible: model.pControlType === DataNode.Button
-                    text: model.value
-                    onClicked: itemButtonClicked(model)
-                    Layout.minimumWidth: 150
+                    implicitWidth: btn.width+10
+                    height: parent.height
+                    Button {
+                        id:btn
+                        text: model.value
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        onClicked: itemButtonClicked(model)
+                        Layout.minimumWidth: 100
+                        Layout.margins: 0
+                    }
+                    Label{
+                        width: 10
+                    }
                 }
                 RowLayout {
-                    anchors.right: parent.right
-                    visible: model.pControlType === DataNode.Label
+                    anchors.right: editFlag.left
+                    visible: (model.pControlType === DataNode.Label||model.pControlType === DataNode.ComboBox)
                     implicitWidth: lblValue.width + lblUnit.width + 10
                     height: parent.height
-                    Label {
 
-                        //                    visible: !(type == 1 || type == 6)
-                        //                    text: model.preValue !== undefined ? (model.preValue
-                        //                                                          + model.valueM) : model.valueM
+                    Label {
                         id: lblValue
                         height: parent.height
                         font.pixelSize: 16
-                        text: model.value
-                        enabled: false
+                        text: model.fValue
                         verticalAlignment: Text.AlignRight
-                        anchors.verticalCenter: parent.verticalCenter
-                        //                    color: parent.getColor()
-                        //                    echoMode: type == 5 ? TextInput.Password : TextInput.Normal
+                        Layout.alignment: Qt.AlignVCenter
                     }
                     Label {
-                        visible: model.elementType !== CH.SWitchButton
                         id: lblUnit
-                        text: unit
+                        visible: model.pControlType !== DataNode.SWitchButton
+                        text: model.unit
                         font.pixelSize: 16
                         height: parent.height
                         verticalAlignment: Text.AlignVCenter
-                        //                    color: (model.isDisabled !== undefined
-                        //                            && isDisabled) ? "#ccc" : "black"
+                        Layout.minimumWidth: 20
+                    }
+                    Label{
+                        width: 10
                     }
                 }
                 RowLayout {
                     //enabled: !isItemReadOnly
+                    anchors.right: editFlag.left
                     implicitWidth: switchButton.width + 10
                     height: parent.height
                     SwitchDelegate {
                         id: switchButton
                         visible: model.pControlType === DataNode.SWitchButton
                         checked: Number(model.value) === 1
+                        height: parent.height
                         onClicked: {
-                            model.value = checked ? "1" : "0"
+                            model.value = checked ? 1 : 0
+                            console.log(model.value)
                             switchChanged(model)
                         }
                         //visible: !(model.isDisabled !== undefined && isDisabled)
                     }
+                    Label{
+                        width:  10
+                    }
                 }
-
-                //                Image {
-                //                    anchors.right: parent.right
-                //                    //                    visible: !(model.type === 1 || model.type === 4
-                //                    //                               || model.type === 6) && !isItemReadOnly
-                //                    width: 40
-                //                    height: 40
-                //                    sourceSize.width: 40
-                //                    sourceSize.height: 40
-                //                    source: "qrc:/images/rightgo.png"
-                //                }
+                Image {
+                    id:editFlag
+                    anchors.right: parent.right
+                    //                    visible: !(model.type === 1 || model.type === 4
+                    //                               || model.type === 6) && !isItemReadOnly
+                    width: 35
+                    height: 35
+                    anchors.verticalCenter: parent.verticalCenter
+                    sourceSize.width: 35
+                    sourceSize.height: 35
+                    source: "qrc:/images/rightgo.png"
+                }
             }
         }
 
@@ -134,3 +139,118 @@ Designer {
 }
 ##^##*/
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*##^## Designer {
+    D{i:0;width:400}
+}
+ ##^##*/

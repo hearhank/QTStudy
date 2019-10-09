@@ -8,5 +8,6 @@
         <file>DataItemsPage.qml</file>
         <file>PhoneItemDelegate.qml</file>
         <file>GroupSettings.qml</file>
+        <file>images/rightgo.png</file>
     </qresource>
 </RCC>

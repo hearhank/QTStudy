@@ -23,6 +23,17 @@ Page {
             DataNode {
                 name: "Group 1"
                 children: [
+
+                    DataNode{
+                        name: "Reset"
+                        value: "reset length"
+                        pControlType: DataNode.Button
+                    }
+                ]
+            },
+            DataNode {
+                name: "Group 2"
+                children: [
                     DataNode {
                         name: "On/Off"
                         value: 1
@@ -35,30 +46,44 @@ Page {
                             type: DataCalc.Zoom
                             value: 1
                         }
-                    }
-                ]
-            },
-            DataNode {
-                name: "Group 2"
-                children: [
+                    },
+                    DataNode{
+                      name: "Speed"
+                      value: "101"
+                      unit: "m/s"
+                    },
+
                     DataNode {
-                        name: "Last Name"
-                        value: "Hank"
+                        name: "Gauge mode"
+                        value: 0
                         desc: DataDesc {
                             offset: 1
                             dataType: DataDesc.Int
                         }
+                        refNames: "On/Off"
+                        pControlType: DataNode.ComboBox
+                        children: [
+                            DataNode{
+                                name: "Average"
+                            },
+                            DataNode{
+                                name: "In Time"
+                            }
+                        ]
+                        onValueChanged: {
+                            value=vals[0]
+                        }
                     },
                     DataNode {
-                        name: "Full Name"
-                        refNames: ["On/Off", "Last Name"]
-                        value: ""
+                        name: "Other"
+                        refNames: ["On/Off", "Gauge mode"]
+                        value: "1"
                         enabled: true
                         convertType: CH.NameC
                         onValueChanged: {
                             console.log(val)
                             console.log(vals)
-                            value = vals[1] + "." + vals[0]
+                            fValue = vals[1] + "." + vals[0]
                         }
                     }
                 ]

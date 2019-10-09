@@ -40,9 +40,9 @@ void DataNodes::clear(){
     emit nodesChanged(0);
 }
 
-DataNode *DataNodes::getStore(const QString &name) {
-    return Singleton<AppStores>::getInstance().getDataItem(name);
-}
+// DataNode *DataNodes::getStore(const QString &name) {
+//    return Singleton<AppStores>::getInstance().getDataItem(name);
+//}
 
 void DataNodes::add(QQmlListProperty<DataNode>* list, DataNode *item)
 {
@@ -59,28 +59,24 @@ QString DataNodes::name() const
     return m_name;
 }
 
-void DataNodes::setName(const QString &name)
-{
-    m_name = name;
-}
+void DataNodes::setName(const QString& name) { m_name = name; }
+
+void DataNodes::load(QList<DataNode*> nodes) {}
 
 QList<DataNode *> DataNodes::nodeList()
 {
     return m_nodes;
 }
 
-void DataNodes::Load() {
-    if (m_nodes.count() == 0)
-        return;
-    foreach (auto item, m_nodes) {
-        if (!item->isLoad()) {
-            item->Load(m_nodes);
-        }
-//        if (item->getStore()) {
-//            Singleton<AppStores>::getInstance().addDataItem(item);
-//            qDebug() << item->parent();
-//        }
+void DataNodes::Load(QHash<QString, DataNode*> nodes) {
+  //  qDebug() << name() << " Load" << m_nodes.count();
+  if (m_nodes.count() == 0)
+    return;
+  foreach (auto node, m_nodes) {
+    if (!node->isLoad()) {
+      node->Load(nodes);
     }
+  }
 }
 
 DataNode* DataNodes::at(QQmlListProperty<DataNode> *list, int index)

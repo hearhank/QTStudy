@@ -14,7 +14,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        appstores.cpp \
         convertservers.cpp \
         datacalc.cpp \
         datadesc.cpp \
@@ -41,7 +40,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     EnumTypes.hpp \
     Singleton.hpp \
-    appstores.hpp \
     convertservers.hpp \
     datacalc.hpp \
     datadesc.hpp \

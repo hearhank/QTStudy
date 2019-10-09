@@ -25,17 +25,21 @@ public:
 signals:
 
 public slots:
-    void doRead();
+  void doReadAll();
 
 private:
-    QVariant ReadDataItem(const DataNode *item);
-    void WriteDataItem(const DataNode *item, const QVariant &val);
+  QList<DataNode*> extendNodes(const DataNodes* nodes);
+  QList<DataNode*> extend(const DataNode* node);
+  void read(const QList<DataNode*> nodes);
+  QVariant ReadDataByNode(const DataNode* item);
+  void WriteDataItem(const DataNode* item, const QVariant& val);
 
-    QTimer m_timer;
-    QHash<QString, DataNodes *> m_items;
-    int m_interval;
-    bool m_flag = false;
-    QMutex m_mutex;
+  QTimer m_timer;
+  QHash<QString, DataNodes*> m_items;
+  QHash<QString, DataNode*> m_allNodes;
+  int m_interval;
+  bool m_flag = false;
+  QMutex m_mutex;
 };
 
 #endif // PAGEOPERATIONTIMER_HPP

@@ -1,51 +1,49 @@
 #include "datanode.hpp"
 
-DataNode::DataNode(QObject *parent) : QObject(parent),
-    m_value(QVariant()),
-    m_refNames(),
-    m_convertType(CH::DataConverter::None),
-    m_load(false),
-    m_desc(nullptr),
-    m_calc(nullptr),
-    m_unit(""),
-    m_pControlType(PControlType::Label),
-    m_enabled(true)
-{
-
+DataNode::DataNode(QObject* parent)
+    : QObject(parent), m_value(QVariant()), m_refNames(),
+      m_convertType(CH::DataConverter::None), m_load(false), m_desc(nullptr),
+      m_calc(nullptr), m_unit(""), m_pControlType(PControlType::Label),
+      m_enabled(true) {
+  // connect(this, &DataNode::valueChanged, this, &DataNode::formatValue);
 }
 
 DataNode::~DataNode() {
     if (m_desc != nullptr)
         m_desc->deleteLater();
-    qDebug() << "~DataNode()";
+    //    qDebug() << "~DataNode()";
 }
 
-void DataNode::Load(const QList<DataNode*> datas) {
-    if (m_load)
-        return;
-
-    if (m_refNames.count() > 0) {
-        QListIterator<DataNode *> i(datas);
-        while (i.hasNext()) {
-            const DataNode *item = i.next();
-            if (m_refNames.contains(item->name())) {
-                connect(item, &DataNode::valueChanged, this,
-                        &DataNode::getValueChanged);
-                m_refNodes.append(const_cast<DataNode *>(item));
-            }
-        }
-        qDebug() << name() << " Load";
-        getValueChanged();
+void DataNode::Load(const QHash<QString, DataNode*> datas) {
+  if (m_load)
+    return;
+  //  qDebug() << name() << " =>Load";
+  if (m_refNames.count() > 0) {
+    foreach (auto name, m_refNames) {
+      if (datas.contains(name)) {
+        connect(datas[name], &DataNode::valueChanged, this,
+                &DataNode::getValueChanged);
+        m_refNodes.append(const_cast<DataNode*>(datas[name]));
+      }
     }
-    m_load = true;
+    qDebug() << name() << " Load";
+    getValueChanged();
+  }
+  m_load = true;
+  foreach (auto item, m_children) {
+    if (!item->isLoad())
+      item->Load(datas);
+  }
 }
 void DataNode::getValueChanged() {
-    QList<QVariant> list;
-    QListIterator<DataNode *> i(this->m_refNodes);
-    while (i.hasNext()) {
-        list.append(i.next()->value());
-    }
-    emit valueChanged(this->value(), list);
+  qDebug() << this->name() << m_refNames;
+  QList<QVariant> list;
+  QListIterator<DataNode*> i(this->m_refNodes);
+  while (i.hasNext()) {
+    list.append(i.next()->value());
+  }
+  qDebug() << this->value();
+  emit valueChanged(this->value(), list);
 }
 
 void DataNode::add(QQmlListProperty<DataNode> *list, DataNode *node)
@@ -68,10 +66,40 @@ void DataNode::clear(QQmlListProperty<DataNode> *list)
     reinterpret_cast<DataNode*>(list->data)->clear();
 }
 
-bool DataNode::getSelected() const
-{
-    return m_selected;
+QVariant DataNode::getFValue() const { return m_fValue; }
+
+void DataNode::setFValue(const QVariant& val) {
+  qDebug() << name() << val;
+  if (m_fValue != val) {
+    m_fValue = val;
+    emit fValueChanged(m_fValue);
+  }
 }
+
+QVariant DataNode::formatValue(const QVariant& val) {
+  if (this->m_pControlType == DataNode::ComboBox) {
+    return getNode(val.toInt())->name();
+  }
+  return val;
+}
+QVariant DataNode::value() const { return m_value; }
+
+void DataNode::setValue(const QVariant& value) {
+
+  if (m_value != value) {
+    m_value = value;
+    qDebug() << this->name() << value;
+
+    setFValue(formatValue(m_value));
+    if (m_refNodes.count() == 0) {
+      emit valueChanged(m_value, QList<QVariant>());
+    } else {
+      getValueChanged();
+    }
+  }
+}
+
+bool DataNode::getSelected() const { return m_selected; }
 
 void DataNode::setSelected(bool selected)
 {
@@ -81,15 +109,18 @@ void DataNode::setSelected(bool selected)
     }
 }
 
+DataNode* DataNode::getNode(int index) {
+  if (index >= 0 && m_children.count() > index) {
+    return m_children[index];
+  }
+  return nullptr;
+}
+QList<DataNode*> DataNode::nodes() { return m_children; }
+
 QQmlListProperty<DataNode> DataNode::children()
 {
     return QQmlListProperty<DataNode>(this, m_children);
 }
-
-// void DataNode::setChildNodes(const QQmlListProperty<DataNode> &childNodes)
-//{
-//    m_childNodes = childNodes;
-//}
 
 void DataNode::add(DataNode *node) {
     m_children.append(node);
@@ -124,30 +155,9 @@ bool DataNode::getHidden() const
     return m_hidden;
 }
 
-void DataNode::setHidden(bool hidden)
-{
-    m_hidden = hidden;
-}
+void DataNode::setHidden(bool hidden) { m_hidden = hidden; }
 
-QVariant DataNode::value() const {
-    return m_value;
-}
-
-void DataNode::setValue(const QVariant &value) {
-
-    if (m_value != value) {
-        m_value = value;
-        if(m_refNodes.count() == 0)
-            emit valueChanged(m_value, QList<QVariant>());
-        else
-            getValueChanged();
-    }
-}
-
-QString DataNode::name() const
-{
-    return m_name;
-}
+QString DataNode::name() const { return m_name; }
 
 void DataNode::setName(const QString &name)
 {
