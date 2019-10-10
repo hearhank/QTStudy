@@ -22,7 +22,7 @@ ItemDelegate {
 
         Grid {
             id: grid
-            anchors.fill:parent
+            anchors.fill: parent
             columns: 2
             rows: 1
             spacing: 0
@@ -39,30 +39,31 @@ ItemDelegate {
 
             Item {
                 id: element
-                width: parent.width-lblTitle.width
+                width: parent.width - lblTitle.width
                 height: parent.height
                 Layout.margins: 0
                 RowLayout {
                     anchors.right: editFlag.left
                     visible: model.pControlType === DataNode.Button
-                    implicitWidth: btn.width+10
+                    implicitWidth: btn.width + 2
                     height: parent.height
                     Button {
-                        id:btn
+                        id: btn
                         text: model.value
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         onClicked: itemButtonClicked(model)
                         Layout.minimumWidth: 100
                         Layout.margins: 0
                     }
-                    Label{
-                        width: 10
+                    Label {
+                        width: 2
                     }
                 }
                 RowLayout {
                     anchors.right: editFlag.left
-                    visible: (model.pControlType === DataNode.Label||model.pControlType === DataNode.ComboBox)
-                    implicitWidth: lblValue.width + lblUnit.width + 10
+                    visible: (model.pControlType === DataNode.Label
+                              || model.pControlType === DataNode.ComboBox)
+                    implicitWidth: lblValue.width + lblUnit.width + 2
                     height: parent.height
 
                     Label {
@@ -82,20 +83,22 @@ ItemDelegate {
                         verticalAlignment: Text.AlignVCenter
                         Layout.minimumWidth: 20
                     }
-                    Label{
-                        width: 10
+                    Label {
+                        width: 2
                     }
                 }
                 RowLayout {
                     //enabled: !isItemReadOnly
                     anchors.right: editFlag.left
-                    implicitWidth: switchButton.width + 10
+                    implicitWidth: switchButton.width + 2
                     height: parent.height
                     SwitchDelegate {
                         id: switchButton
+                        height: parent.height
+                        Layout.fillHeight: true
+                        padding: 0
                         visible: model.pControlType === DataNode.SWitchButton
                         checked: Number(model.value) === 1
-                        height: parent.height
                         onClicked: {
                             model.value = checked ? 1 : 0
                             console.log(model.value)
@@ -103,20 +106,22 @@ ItemDelegate {
                         }
                         //visible: !(model.isDisabled !== undefined && isDisabled)
                     }
-                    Label{
-                        width:  10
+                    Label {
+                        width: 2
                     }
                 }
                 Image {
-                    id:editFlag
+                    id: editFlag
                     anchors.right: parent.right
-                    //                    visible: !(model.type === 1 || model.type === 4
-                    //                               || model.type === 6) && !isItemReadOnly
-                    width: 35
-                    height: 35
+                    anchors.rightMargin: 5
+                    visible: (model.pControlType === DataNode.Label
+                              || model.pControlType === DataNode.ComboBox)
+                    //&& !isItemReadOnly
+                    width: 20
+                    height: 20
                     anchors.verticalCenter: parent.verticalCenter
-                    sourceSize.width: 35
-                    sourceSize.height: 35
+                    sourceSize.width: 20
+                    sourceSize.height: 20
                     source: "qrc:/images/rightgo.png"
                 }
             }
@@ -140,117 +145,8 @@ Designer {
 ##^##*/
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*##^## Designer {
     D{i:0;width:400}
 }
  ##^##*/
+

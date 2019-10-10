@@ -21,6 +21,7 @@ public:
     ~DataDesc();
 
     enum DataType {
+        Bit,
         Boolean,
         Byte,
         Short,
