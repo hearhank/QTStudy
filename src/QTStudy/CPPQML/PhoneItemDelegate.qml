@@ -7,15 +7,15 @@ import Proton.Datas 1.0
 ItemDelegate {
     id: phoneDelegate
     signal itemClicked(var childIndex)
-    signal switchChanged(var ele)
-    signal itemButtonClicked(var ele)
+//    signal switchChanged(var ele)
+//    signal itemButtonClicked(var ele)
+    signal editClicked(int t,var ele)
     property bool isItemReadOnly: false
     Item {
         anchors.fill: parent
         MouseArea {
             anchors.fill: parent
             onClicked: {
-                console.log(index)
                 itemClicked(index)
             }
         }
@@ -51,7 +51,10 @@ ItemDelegate {
                         id: btn
                         text: model.value
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        onClicked: itemButtonClicked(model)
+                        onClicked: {
+                            editClicked(1,model)
+                            itemClicked(index)
+                        }
                         Layout.minimumWidth: 100
                         Layout.margins: 0
                     }
@@ -61,7 +64,7 @@ ItemDelegate {
                 }
                 RowLayout {
                     anchors.right: editFlag.left
-                    visible: (model.pControlType === DataNode.Label
+                    visible: (model.pControlType === DataNode.TextBox
                               || model.pControlType === DataNode.ComboBox)
                     implicitWidth: lblValue.width + lblUnit.width + 2
                     height: parent.height
@@ -101,8 +104,8 @@ ItemDelegate {
                         checked: Number(model.value) === 1
                         onClicked: {
                             model.value = checked ? 1 : 0
-                            console.log(model.value)
-                            switchChanged(model)
+                            editClicked(2,model)
+                            itemClicked(index)
                         }
                         //visible: !(model.isDisabled !== undefined && isDisabled)
                     }
@@ -110,20 +113,33 @@ ItemDelegate {
                         width: 2
                     }
                 }
-                Image {
+                Item{
                     id: editFlag
                     anchors.right: parent.right
                     anchors.rightMargin: 5
-                    visible: (model.pControlType === DataNode.Label
+                    width: 40
+                    height: parent.height
+                    visible: (model.pControlType === DataNode.TextBox
                               || model.pControlType === DataNode.ComboBox)
-                    //&& !isItemReadOnly
-                    width: 20
-                    height: 20
-                    anchors.verticalCenter: parent.verticalCenter
-                    sourceSize.width: 20
-                    sourceSize.height: 20
-                    source: "qrc:/images/rightgo.png"
+                    Image {
+                        width: 20
+                        height: 20
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        sourceSize.width: 20
+                        sourceSize.height: 20
+                        source: "qrc:/images/rightgo.png"
+                    }
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+                            editClicked(0,model)
+                            itemClicked(index)
+                        }
+                    }
                 }
+
+
             }
         }
 

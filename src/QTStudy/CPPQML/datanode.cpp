@@ -3,7 +3,7 @@
 DataNode::DataNode(QObject* parent)
     : QObject(parent), m_value(QVariant()), m_refNames(),
       m_convertType(CH::DataConverter::None), m_load(false), m_desc(nullptr),
-      m_calc(nullptr), m_unit(""), m_pControlType(PControlType::Label),
+      m_calc(nullptr), m_unit(""), m_pControlType(PControlType::TextBox),
       m_enabled(true) {
   // connect(this, &DataNode::valueChanged, this, &DataNode::formatValue);
 }
@@ -36,13 +36,13 @@ void DataNode::Load(const QHash<QString, DataNode*> datas) {
   }
 }
 void DataNode::getValueChanged() {
-  qDebug() << this->name() << m_refNames;
+  // qDebug() << this->name() << m_refNames;
   QList<QVariant> list;
   QListIterator<DataNode*> i(this->m_refNodes);
   while (i.hasNext()) {
     list.append(i.next()->value());
   }
-  qDebug() << this->value();
+  // qDebug() << this->value();
   emit valueChanged(this->value(), list);
 }
 
@@ -69,7 +69,7 @@ void DataNode::clear(QQmlListProperty<DataNode> *list)
 QVariant DataNode::getFValue() const { return m_fValue; }
 
 void DataNode::setFValue(const QVariant& val) {
-  qDebug() << name() << val;
+  // qDebug() << name() << val;
   if (m_fValue != val) {
     m_fValue = val;
     emit fValueChanged(m_fValue);
@@ -78,6 +78,7 @@ void DataNode::setFValue(const QVariant& val) {
 
 QVariant DataNode::formatValue(const QVariant& val) {
   if (this->m_pControlType == DataNode::ComboBox) {
+    // qDebug() << name() << val;
     return getNode(val.toInt())->name();
   }
   return val;
@@ -88,8 +89,8 @@ void DataNode::setValue(const QVariant& value) {
 
   if (m_value != value) {
     m_value = value;
-    qDebug() << this->name() << value;
 
+    qDebug() << Q_FUNC_INFO << this->name() << value;
     setFValue(formatValue(m_value));
     if (m_refNodes.count() == 0) {
       emit valueChanged(m_value, QList<QVariant>());

@@ -10,6 +10,7 @@ ItemDelegate {
     checkable: true
 
     signal titleClicked(int group)
+    signal doEditClicked(int t,var ele)
     onCheckedChanged: {
         delegate.state = checked ? "expanded" : "normal"
     }
@@ -63,8 +64,12 @@ ItemDelegate {
             delegate: PhoneItemDelegate {
                 width: parent.width
                 height: itemHeight
+                isItemReadOnly: false
                 onItemClicked: {
                     listView.currentIndex = childIndex
+                }
+                onEditClicked: {
+                    doEditClicked(t,ele)
                 }
             }
             focus: true

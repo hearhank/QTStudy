@@ -4,6 +4,13 @@ import QtQuick.Layouts 1.0
 import Proton.Datas 1.0
 
 Page {
+    id:root
+    property var current:null
+    function write(val)
+    {
+        current.value   =val;
+    }
+
     DataNodes {
         id: hidden_datas
         name: "hidden_datas"
@@ -23,11 +30,15 @@ Page {
             DataNode {
                 name: "Group 1"
                 children: [
-
                     DataNode{
                         name: "Reset"
                         value: "reset length"
                         pControlType: DataNode.Button
+                    },
+                    DataNode{
+                        name: "Mode"
+                        value: 0
+                        pControlType: DataNode.SWitchButton
                     }
                 ]
             },
@@ -51,6 +62,7 @@ Page {
                       name: "Speed"
                       value: "101"
                       unit: "m/s"
+                      pControlType: DataNode.TextBox
                     },
 
                     DataNode {
@@ -60,7 +72,7 @@ Page {
                             offset: 1
                             dataType: DataDesc.Int
                         }
-                        refNames: "On/Off"
+                        //refNames: "On/Off"
                         pControlType: DataNode.ComboBox
                         children: [
                             DataNode{
@@ -70,9 +82,6 @@ Page {
                                 name: "In Time"
                             }
                         ]
-                        onValueChanged: {
-                            value=vals[0]
-                        }
                     },
                     DataNode {
                         name: "Other"
@@ -81,8 +90,8 @@ Page {
                         enabled: true
                         convertType: CH.NameC
                         onValueChanged: {
-                            console.log(val)
-                            console.log(vals)
+//                            console.log(val)
+//                            console.log(vals)
                             fValue = vals[1] + "." + vals[0]
                         }
                     }
@@ -102,6 +111,16 @@ Page {
                 var i = 0
                 for (; i < wrapper.model.length; i++) {
                     wrapper.model[i].selected = (i === group)
+                }
+            }
+            onDoEditClicked: {
+                if(ele.pControlType===DataNode.TextBox){
+                    root.StackView.view.push("qrc:/InputEditPage.qml",{node:ele})
+                }else if(ele.pControlType===DataNode.ComboBox)
+                {
+                    root.StackView.view.push("qrc:/SelectEditPage.qml",{node:ele})
+                }else{
+                    console.log("not support")
                 }
             }
         }

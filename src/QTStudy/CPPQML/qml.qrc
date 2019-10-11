@@ -9,5 +9,9 @@
         <file>PhoneItemDelegate.qml</file>
         <file>GroupSettings.qml</file>
         <file>images/rightgo.png</file>
+        <file>InputEditPage.qml</file>
+        <file>SelectEditPage.qml</file>
+        <file>images/back.png</file>
+        <file>images/ok.png</file>
     </qresource>
 </RCC>
