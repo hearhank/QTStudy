@@ -1,8 +1,7 @@
 #include "pageoperationtimer.hpp"
 
 PageOperationTimer::PageOperationTimer(QObject* parent)
-    : QObject(parent), m_items(), m_interval(500) {
-}
+    : QObject(parent), m_interval(500) {}
 
 PageOperationTimer::~PageOperationTimer() {
     stop();
@@ -10,17 +9,21 @@ PageOperationTimer::~PageOperationTimer() {
 }
 
 void PageOperationTimer::setDataItems(DataNodes* nodes) {
-  if (!m_items.contains(nodes->name())) {
-    m_items.insert(nodes->name(), nodes);
-    foreach (auto node, extendNodes(nodes)) {
-      //      qDebug() << node->name() << node->refNames();
-      m_allNodes.insert(node->name(), node);
-    }
+  //  if (!m_items.contains(nodes->name())) {
+  //    m_items.insert(nodes->name(), nodes);
+
+  //  }
+  foreach (auto node, extendNodes(nodes)) {
+    m_allNodes.insert(node->name(), node);
   }
 }
 
 void PageOperationTimer::start() {
-  foreach (auto item, m_items.values()) { item->Load(m_allNodes); }
+  foreach (auto item, m_allNodes) {
+    if (!item->isLoad()) {
+      item->Load(m_allNodes);
+    }
+  }
   connect(&m_timer, &QTimer::timeout, this, &PageOperationTimer::runSync);
   m_timer.start(m_interval);
 }
@@ -32,12 +35,11 @@ void PageOperationTimer::stop() {
 
 void PageOperationTimer::runSync() {
 
-  QFuture<void> future =
-      QtConcurrent::run(this, &PageOperationTimer::doReadAll);
+  QFuture<void> future = QtConcurrent::run(this, &PageOperationTimer::readAll);
   future.waitForFinished();
 }
 
-void PageOperationTimer::doReadAll() {
+void PageOperationTimer::readAll() {
   QMutexLocker lock(&m_mutex);
   foreach (auto node, m_allNodes.values()) {
     if (node->desc() != nullptr) {
@@ -46,34 +48,23 @@ void PageOperationTimer::doReadAll() {
   }
 }
 
-QList<DataNode*> PageOperationTimer::extendNodes(const DataNodes* nodes) {
+QList<DataNode*> PageOperationTimer::extendNodes(DataNodes* nodes) {
   QList<DataNode*> datas;
-  foreach (auto node, const_cast<DataNodes*>(nodes)->nodeList()) {
-    datas.append(extend(node));
-  }
+  foreach (auto node, nodes->nodes()) { datas.append(extend(node)); }
   return datas;
 }
 
-QList<DataNode*> PageOperationTimer::extend(const DataNode* node) {
+QList<DataNode*> PageOperationTimer::extend(NodeBase* node) {
   QList<DataNode*> nodes;
-  nodes.append(const_cast<DataNode*>(node));
-  foreach (auto cnode, const_cast<DataNode*>(node)->nodes()) {
-    nodes.append(extend(cnode));
-  }
+  auto temp = dynamic_cast<DataNode*>(node);
+  if (temp != nullptr)
+    nodes.append(dynamic_cast<DataNode*>(node));
+
+  foreach (auto cnode, node->nodes()) { nodes.append(extend(cnode)); }
   return nodes;
 }
 
-void PageOperationTimer::read(const QList<DataNode*> nodes) {
-  if (nodes.count() > 0) {
-    foreach (auto node, nodes) {
-      if (node->desc() != nullptr)
-        node->setValue(ReadDataByNode(node));
-      read(node->nodes());
-    }
-  }
-}
-
-QVariant PageOperationTimer::ReadDataByNode(const DataNode* item) {
+QVariant PageOperationTimer::ReadDataByNode(const NodeBase* item) {
   // TODO
   //    int r = item->value().toInt();
   //    r += 1;

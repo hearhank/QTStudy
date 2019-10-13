@@ -44,7 +44,7 @@ ItemDelegate {
                 Layout.margins: 0
                 RowLayout {
                     anchors.right: editFlag.left
-                    visible: model.pControlType === DataNode.Button
+                    visible: model.control === DataNode.Button
                     implicitWidth: btn.width + 2
                     height: parent.height
                     Button {
@@ -64,8 +64,8 @@ ItemDelegate {
                 }
                 RowLayout {
                     anchors.right: editFlag.left
-                    visible: (model.pControlType === DataNode.TextBox
-                              || model.pControlType === DataNode.ComboBox)
+                    visible: (model.control === DataNode.TextBox
+                              || model.control === DataNode.ComboBox)
                     implicitWidth: lblValue.width + lblUnit.width + 2
                     height: parent.height
 
@@ -73,13 +73,13 @@ ItemDelegate {
                         id: lblValue
                         height: parent.height
                         font.pixelSize: 16
-                        text: model.fValue
+                        text: model.fvalue
                         verticalAlignment: Text.AlignRight
                         Layout.alignment: Qt.AlignVCenter
                     }
                     Label {
                         id: lblUnit
-                        visible: model.pControlType !== DataNode.SWitchButton
+                        visible: model.control !== DataNode.SWitchButton
                         text: model.unit
                         font.pixelSize: 16
                         height: parent.height
@@ -100,7 +100,7 @@ ItemDelegate {
                         height: parent.height
                         Layout.fillHeight: true
                         padding: 0
-                        visible: model.pControlType === DataNode.SWitchButton
+                        visible: model.control === DataNode.SWitchButton
                         checked: Number(model.value) === 1
                         onClicked: {
                             model.value = checked ? 1 : 0
@@ -119,8 +119,8 @@ ItemDelegate {
                     anchors.rightMargin: 5
                     width: 40
                     height: parent.height
-                    visible: (model.pControlType === DataNode.TextBox
-                              || model.pControlType === DataNode.ComboBox)
+                    visible: (model.control === DataNode.TextBox
+                              || model.control === DataNode.ComboBox)
                     Image {
                         width: 20
                         height: 20

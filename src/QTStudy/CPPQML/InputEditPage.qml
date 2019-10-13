@@ -91,7 +91,7 @@ Page {
                     horizontalAlignment: Text.AlignRight
                     verticalAlignment: Text.AlignVCenter
                     font.bold: true
-                    text: node.fValue
+                    text: node.fvalue
                     anchors.rightMargin: 10
                     onTextChanged: {
                         if (lblShow.text != "") {

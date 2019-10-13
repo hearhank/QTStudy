@@ -40,11 +40,11 @@ void DataItems::clear(){
   emit datasChanged(0);
 }
 
-DataItem *DataItems::getStore(const QString &name) {
-  // TODO
-  return nullptr;
-  // return Singleton<AppStores>::getInstance().getDataItem(name);
-}
+// DataItem *DataItems::getStore(const QString &name) {
+//  // TODO
+//  return nullptr;
+//  // return Singleton<AppStores>::getInstance().getDataItem(name);
+//}
 
 void DataItems::add(QQmlListProperty<DataItem>* list, DataItem *item)
 {

@@ -25,17 +25,16 @@ public:
 signals:
 
 public slots:
-  void doReadAll();
+  void readAll();
 
 private:
-  QList<DataNode*> extendNodes(const DataNodes* nodes);
-  QList<DataNode*> extend(const DataNode* node);
-  void read(const QList<DataNode*> nodes);
-  QVariant ReadDataByNode(const DataNode* item);
+  QList<DataNode*> extendNodes(DataNodes* nodes);
+  QList<DataNode*> extend(NodeBase* node);
+  QVariant ReadDataByNode(const NodeBase* item);
   void WriteDataItem(const DataNode* item, const QVariant& val);
 
   QTimer m_timer;
-  QHash<QString, DataNodes*> m_items;
+  //  QHash<QString, DataNodes*> m_items;
   QHash<QString, DataNode*> m_allNodes;
   int m_interval;
   bool m_flag = false;

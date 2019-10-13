@@ -29,7 +29,7 @@ public:
 
   void Load();
 
-  Q_INVOKABLE DataItem *getStore(const QString &name);
+  //  Q_INVOKABLE DataItem *getStore(const QString &name);
   QString name() const;
   void setName(const QString &name);
 

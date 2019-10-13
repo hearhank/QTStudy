@@ -67,18 +67,8 @@ Page {
                 onClicked: {
                     console.log(index)
                     wrapper.currentIndex = index
-//                    console.log(model.isDisabled)
-//                    if (model.isDisabled !== undefined && model.isDisabled)
-//                        return
                     node.value=Number(index)
-//                    var value = datas.get(wrapper.currentIndex).value
-//                    if (!value) {
-//                        value = wrapper.currentIndex
-//                    }
-//                    item.valueM = datas.get(wrapper.currentIndex).name
-//                    item.value = value
-//                    containqml.write(root.item.offset, value)
-                    //root.StackView.view.pop()
+                    root.StackView.view.pop()
                 }
             }
 

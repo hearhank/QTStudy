@@ -1,14 +1,15 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
+import Proton.Datas 1.0
 
 ItemDelegate {
     id: delegate
     padding: 0
-    property int itemHeight: 50
-    checked: selected
     checkable: true
+    checked: selected
 
+    property int itemHeight: 50
     signal titleClicked(int group)
     signal doEditClicked(int t,var ele)
     onCheckedChanged: {
@@ -19,6 +20,7 @@ ItemDelegate {
         if (!visible)
             return 0
     }
+    property DataNode dataNode: null
     property var nodes: model.children
     contentItem: ColumnLayout {
         spacing: 0
@@ -40,10 +42,11 @@ ItemDelegate {
                     text: model.name
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    color: checked ? "white" : (model.isDisabled === true ? "silver" : "black")
+                    color: checked ? "white" : (model.disabled === true ? "silver" : "black")
                 }
                 onClicked: {
                     titleClicked(index)
+                    console.log(checked,model.selected)
                 }
             }
         }

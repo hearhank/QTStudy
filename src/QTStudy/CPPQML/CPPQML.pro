@@ -22,6 +22,7 @@ SOURCES += \
         main.cpp \
         modbusconvert.cpp \
         nameconvert.cpp \
+        nodebase.cpp \
         pageoperationtimer.cpp
 
 RESOURCES += qml.qrc
@@ -47,4 +48,5 @@ HEADERS += \
     datanodes.hpp \
     modbusconvert.hpp \
     nameconvert.hpp \
+    nodebase.hpp \
     pageoperationtimer.hpp

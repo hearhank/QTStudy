@@ -8,13 +8,13 @@ Page {
     property var current:null
     function write(val)
     {
-        current.value   =val;
+        current.value=val;
     }
 
     DataNodes {
         id: hidden_datas
         name: "hidden_datas"
-        nodes: [
+        children: [
             DataNode {
                 name: "Count"
                 value: 10
@@ -26,29 +26,31 @@ Page {
     DataNodes {
         id: binding_datas
         name: "binding_datas"
-        nodes: [
-            DataNode {
+        children: [
+            NodeBase {
                 name: "Group 1"
+                selected: true
                 children: [
                     DataNode{
                         name: "Reset"
                         value: "reset length"
-                        pControlType: DataNode.Button
+                        control: DataNode.Button
                     },
                     DataNode{
                         name: "Mode"
                         value: 0
-                        pControlType: DataNode.SWitchButton
+                        control: DataNode.SWitchButton
                     }
                 ]
             },
-            DataNode {
+            NodeBase {
                 name: "Group 2"
+                selected: false
                 children: [
                     DataNode {
                         name: "On/Off"
                         value: 1
-                        pControlType: DataNode.SWitchButton
+                        control: DataNode.SWitchButton
                         desc: DataDesc {
                             offset: 0
                             dataType: DataDesc.UShort
@@ -62,7 +64,7 @@ Page {
                       name: "Speed"
                       value: "101"
                       unit: "m/s"
-                      pControlType: DataNode.TextBox
+                      control: DataNode.TextBox
                     },
 
                     DataNode {
@@ -73,12 +75,12 @@ Page {
                             dataType: DataDesc.Int
                         }
                         //refNames: "On/Off"
-                        pControlType: DataNode.ComboBox
+                        control: DataNode.ComboBox
                         children: [
-                            DataNode{
+                            NodeBase{
                                 name: "Average"
                             },
-                            DataNode{
+                            NodeBase{
                                 name: "In Time"
                             }
                         ]
@@ -88,11 +90,11 @@ Page {
                         refNames: ["On/Off", "Gauge mode"]
                         value: "1"
                         enabled: true
-                        convertType: CH.NameC
+                        converter: CH.NameC
                         onValueChanged: {
 //                            console.log(val)
 //                            console.log(vals)
-                            fValue = vals[1] + "." + vals[0]
+                            fvalue = vals[1] + "." + vals[0]
                         }
                     }
                 ]
@@ -103,7 +105,7 @@ Page {
     ListView {
         id: wrapper
         anchors.fill: parent
-        model: binding_datas.nodes
+        model: binding_datas.children
         delegate: GroupSettings {
             width: parent.width
             onTitleClicked: {
@@ -114,9 +116,9 @@ Page {
                 }
             }
             onDoEditClicked: {
-                if(ele.pControlType===DataNode.TextBox){
+                if(ele.control===DataNode.TextBox){
                     root.StackView.view.push("qrc:/InputEditPage.qml",{node:ele})
-                }else if(ele.pControlType===DataNode.ComboBox)
+                }else if(ele.control===DataNode.ComboBox)
                 {
                     root.StackView.view.push("qrc:/SelectEditPage.qml",{node:ele})
                 }else{
