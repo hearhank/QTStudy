@@ -20,9 +20,7 @@ void PageOperationTimer::setDataItems(DataNodes* nodes) {
 
 void PageOperationTimer::start() {
   foreach (auto item, m_allNodes) {
-    if (!item->isLoad()) {
       item->Load(m_allNodes);
-    }
   }
   connect(&m_timer, &QTimer::timeout, this, &PageOperationTimer::runSync);
   m_timer.start(m_interval);

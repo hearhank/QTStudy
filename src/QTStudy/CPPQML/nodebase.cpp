@@ -2,11 +2,16 @@
 
 NodeBase::NodeBase(QObject* parent)
     : QObject(parent), m_name("NodeBase"), m_value(), m_tag(""),
-      m_disabled(false), m_enabled(true) {}
+      m_disabled(false) {}
 
 QVariant NodeBase::value() const { return m_value; }
 
-void NodeBase::setValue(const QVariant& value) { m_value = value; }
+void NodeBase::setValue(const QVariant& val) {
+  if (m_value != val) {
+    m_value = val;
+    emit valueChanged(m_value);
+  }
+}
 
 QString NodeBase::name() const { return m_name; }
 
@@ -74,14 +79,14 @@ void NodeBase::setDisabled(bool val) {
   }
 }
 
-bool NodeBase::enabled() const { return m_enabled; }
+// bool NodeBase::enabled() const { return m_enabled; }
 
-void NodeBase::setEnabled(bool enabled) {
-  if (m_enabled != enabled) {
-    m_enabled = enabled;
-    emit enabledChanged(m_enabled);
-  }
-}
+// void NodeBase::setEnabled(bool enabled) {
+//  if (m_enabled != enabled) {
+//    m_enabled = enabled;
+//    emit enabledChanged(m_enabled);
+//  }
+//}
 
 void NodeBase::add(QQmlListProperty<NodeBase>* list, NodeBase* node) {
     return reinterpret_cast<NodeBase*>(list->data)->add(node);

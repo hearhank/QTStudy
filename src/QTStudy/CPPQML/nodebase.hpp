@@ -16,24 +16,28 @@ class NodeBase : public QObject {
       bool selected READ selected WRITE setSelected NOTIFY selectedChanged)
   Q_PROPERTY(
       bool disabled READ disabled WRITE setDisabled NOTIFY disabledChanged)
-  Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
+  // Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY
+  // enabledChanged)
 public:
-  explicit NodeBase(QObject *parent = nullptr);
+  explicit NodeBase(QObject* parent = nullptr);
 
-  QVariant value() const;
-  virtual void setValue(const QVariant& value);
-
-  QString name() const;
-  void setName(const QString& name);
-  QList<NodeBase*> nodes() const;
-  NodeBase* getNode(const int index);
-
-public:
   QQmlListProperty<NodeBase> children();
   void add(NodeBase* node);
   int count();
   NodeBase* at(int index) const;
   void clear();
+
+  QList<NodeBase*> nodes() const;
+  NodeBase* getNode(const int index);
+
+  //   void Load(const QHash<QString, NodeBase*> datas);
+
+public:
+  QString name() const;
+  void setName(const QString& name);
+
+  QVariant value() const;
+  virtual void setValue(const QVariant& value);
 
   QVariant tag() const;
   void setTag(const QVariant& tag);
@@ -44,16 +48,14 @@ public:
   bool disabled() const;
   void setDisabled(bool val);
 
-  bool enabled() const;
-  void setEnabled(bool enabled);
 signals:
   void nameChanged(const QString& name);
-  void valueChanged(const QVariant& val, const QList<QVariant>& vals);
+  void valueChanged(const QVariant& val);
   void childrenChanged(int flag, const QList<NodeBase*>& datas); //?
   void tagChanged(const QVariant& val);
   void selectedChanged(bool val);
   void disabledChanged(bool val);
-  void enabledChanged(bool val);
+  //  void enabledChanged(bool val);
 
 public slots:
 protected:
@@ -62,7 +64,7 @@ protected:
   QVariant m_tag;
   bool m_selected;
   bool m_disabled;
-  bool m_enabled;
+  //  bool m_enabled;
   QList<NodeBase*> m_datas;
 
 private:

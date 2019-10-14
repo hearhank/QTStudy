@@ -1,7 +1,7 @@
 #include "datanode.hpp"
 
 DataNode::DataNode(QObject* parent)
-    : NodeBase(parent), m_load(false), m_refNames(),
+    : NodeBase(parent), m_load(false), m_sources(),
       m_converter(CH::DataConverter::None), m_desc(nullptr), m_calc(nullptr),
       m_unit(""), m_controlType(ControlType::TextBox) {}
 
@@ -13,34 +13,36 @@ DataNode::~DataNode() {
 void DataNode::Load(const QHash<QString, DataNode*> datas) {
   if (m_load)
     return;
-  if (m_refNames.size() > 0) {
-    foreach (auto name, m_refNames) {
+
+  if (m_sources.size() > 0) {
+    foreach (auto name, m_sources) {
       if (datas.contains(name)) {
         connect(datas[name], &DataNode::valueChanged, this,
-                &DataNode::getFvalueSlots);
-        m_refNodes.append(datas[name]);
+                &DataNode::someSourceChanged);
+        m_sourceNodes.append(datas[name]);
       }
     }
     qDebug() << name() << " Load";
-    getFvalueSlots();
+    someSourceChanged();
+  }
+  if (m_targets.size() > 0) {
+    foreach (auto name, m_targets) {
+      if (datas.contains(name)) {
+        m_targetNodes.append(datas[name]);
+        emit datas[name]->targetUpdated(this);
+      }
+    }
   }
   m_load = true;
-  //  foreach (auto item, m_datas) {
-  //    auto temp = dynamic_cast<DataNode*>(item);
-  //    if (temp != nullptr && !temp->isLoad()) {
-  //      temp->Load(datas);
-  //    }
-  //  }
 }
 
-void DataNode::Unload() {}
-void DataNode::getFvalueSlots() {
-  QList<QVariant> list;
-  QListIterator<DataNode*> i(this->m_refNodes);
+void DataNode::someSourceChanged() {
+  QList<QVariant> datas;
+  QListIterator<DataNode*> i(this->m_sourceNodes);
   while (i.hasNext()) {
-    list.append(i.next()->value());
+    datas.append(i.next()->value());
   }
-  emit valueChanged(this->value(), list);
+  emit sourceUpdated(datas);
 }
 
 QVariant DataNode::fvalue() const { return m_fvalue; }
@@ -59,18 +61,26 @@ QVariant DataNode::formatValue(const QVariant& val) {
   return val;
 }
 
+QStringList DataNode::targets() const { return m_targets; }
+
+void DataNode::setTargets(const QStringList &targetNames)
+{
+    m_targets = targetNames;
+}
+
 void DataNode::setValue(const QVariant& value) {
-
-  if (m_value != value) {
-    m_value = value;
-
-    // qDebug() << Q_FUNC_INFO << this->name() << value;
-    setFvalue(formatValue(m_value));
-    if (m_refNodes.count() == 0) {
-      emit valueChanged(m_value, QList<QVariant>());
-    } else {
-      getFvalueSlots();
-    }
+    if (m_value != value) {
+        m_value = value;
+        setFvalue(formatValue(m_value));
+        if (m_sourceNodes.count() == 0) {
+          emit valueChanged(m_value);
+        } else {
+          someSourceChanged();
+        }
+        // for targets
+        foreach (auto target, m_targetNodes) {
+          emit target->targetUpdated(this);
+        }
   }
 }
 
@@ -84,35 +94,18 @@ void DataNode::setCalc(DataCalc *calc)
     m_calc = calc;
 }
 
-QStringList DataNode::refNames() const
-{
-    return m_refNames;
-}
+QStringList DataNode::sources() const { return m_sources; }
 
-void DataNode::setRefNames(const QStringList &refNames)
-{
-    m_refNames = refNames;
-}
+void DataNode::setSources(const QStringList& val) { m_sources = val; }
 
-bool DataNode::isLoad() const
-{
-    return m_load;
-}
-
-CH::DataConverter DataNode::converter() const
-{
-    return m_converter;
-}
+CH::DataConverter DataNode::converter() const { return m_converter; }
 
 void DataNode::setConverter(const CH::DataConverter &converter)
 {
     m_converter = converter;
 }
 
-QList<DataNode *> DataNode::refNodes() const
-{
-    return m_refNodes;
-}
+QList<DataNode*> DataNode::refNodes() const { return m_sourceNodes; }
 
 DataDesc *DataNode::desc() const
 {

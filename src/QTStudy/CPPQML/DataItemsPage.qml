@@ -55,6 +55,7 @@ Page {
                             offset: 0
                             dataType: DataDesc.UShort
                         }
+                        targets: ["Speed"]
                         calc: DataCalc {
                             type: DataCalc.Zoom
                             value: 1
@@ -65,6 +66,11 @@ Page {
                       value: "101"
                       unit: "m/s"
                       control: DataNode.TextBox
+                      onTargetUpdated: {
+//                          console.log(target)
+                          console.log(target.value)
+                          disabled =Number(target.value)===0
+                      }
                     },
 
                     DataNode {
@@ -87,14 +93,12 @@ Page {
                     },
                     DataNode {
                         name: "Other"
-                        refNames: ["On/Off", "Gauge mode"]
+                        sources: ["On/Off", "Gauge mode"]
                         value: "1"
-                        enabled: true
                         converter: CH.NameC
-                        onValueChanged: {
-//                            console.log(val)
-//                            console.log(vals)
-                            fvalue = vals[1] + "." + vals[0]
+                        onSourceUpdated: {
+//                            console.log(datas)
+                            fvalue=datas[0]+"+"+datas[1]
                         }
                     }
                 ]
@@ -122,7 +126,7 @@ Page {
                 {
                     root.StackView.view.push("qrc:/SelectEditPage.qml",{node:ele})
                 }else{
-                    console.log("not support")
+                    console.log("control:not support")
                 }
             }
         }

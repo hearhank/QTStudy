@@ -7,12 +7,11 @@ import Proton.Datas 1.0
 ItemDelegate {
     id: phoneDelegate
     signal itemClicked(var childIndex)
-//    signal switchChanged(var ele)
-//    signal itemButtonClicked(var ele)
     signal editClicked(int t,var ele)
     property bool isItemReadOnly: false
     Item {
         anchors.fill: parent
+        enabled: !model.disabled
         MouseArea {
             anchors.fill: parent
             onClicked: {
