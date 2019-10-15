@@ -29,7 +29,7 @@ void TrendingTimer::change(QAbstractSeries* series, QAbstractAxis* axis) {
     chart->removeAxis(axis);
     chart->addAxis(axis, Qt::AlignRight);
     series->attachAxis(axis);
-    qDebug() << axis->titleText();
+    //    qDebug() << axis->titleText();
 }
 
 void TrendingTimer::setRefLines(DataItems* items) {
@@ -147,7 +147,7 @@ void TrendingTimer::doRead() {
     foreach (auto item, m_enables) {
         yValues.append(item->value().toReal() + (qrand() % 10));
     }
-    qDebug() << xValue << yValues;
+    //    qDebug() << xValue << yValues;
     emit dataUpdate(xValue, yValues);
 }
 
