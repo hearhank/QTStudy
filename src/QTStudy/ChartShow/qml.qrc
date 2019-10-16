@@ -8,5 +8,6 @@
         <file>SplineChartShow.qml</file>
         <file>CustomLegend.qml</file>
         <file>PhoneItemDelegate.qml</file>
+        <file>Page22.qml</file>
     </qresource>
 </RCC>

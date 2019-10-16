@@ -1,22 +1,15 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick 2.0
+import QtQuick.Controls 2.0
 
-Page {
-    width: 600
-    height: 400
-
-    title: qsTr("Page 2")
-
-    Label {
-        text: qsTr("You are on Page 2.")
-        anchors.centerIn: parent
-    }
+Rectangle {
+    color: "pink"
 
     MultiPointTouchArea {
         anchors.fill: parent
         mouseEnabled: true
         minimumTouchPoints: 1
         maximumTouchPoints: 2
+
         touchPoints: [
             TouchPoint {
                 id: point1
@@ -40,6 +33,8 @@ Page {
             x: point2.x
             y: point2.y
         }
-        onTouchUpdated: console.log(point1.y - point1.startY)
+        onTouchUpdated: {
+            console.log(point1.y - point1.startY)
+        }
     }
 }

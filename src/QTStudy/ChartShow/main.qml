@@ -37,7 +37,6 @@ ApplicationWindow {
 
         Column {
             anchors.fill: parent
-
             ItemDelegate {
                 text: qsTr("Page 1")
                 width: parent.width
@@ -50,7 +49,7 @@ ApplicationWindow {
                 text: qsTr("Page 2")
                 width: parent.width
                 onClicked: {
-                    stackView.push("Page2Form.ui.qml")
+                    stackView.push("qrc:/Page22.qml")
                     drawer.close()
                 }
             }
@@ -61,5 +60,8 @@ ApplicationWindow {
         id: stackView
         initialItem: "Page2Form.ui.qml"
         anchors.fill: parent
+    }
+    Component.onCompleted: {
+        stackView.push("SplineChartShow.qml")
     }
 }

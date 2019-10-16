@@ -65,7 +65,6 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
-
-        //stackView.push("DataItemsPage.qml")
+        //stackView.push("Page2.qml")
     }
 }
