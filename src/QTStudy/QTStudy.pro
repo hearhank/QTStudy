@@ -4,4 +4,5 @@ SUBDIRS += \
     CPPQML \
     CacheDBSettings \
     ChartShow \
-    ModbusCommunication
+    ModbusCommunication \
+    ModbusMasterTest

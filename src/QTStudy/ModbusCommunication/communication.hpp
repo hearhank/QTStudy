@@ -43,7 +43,7 @@ public:
 
   void setRead(const QModbusDataUnit::RegisterType regType,
                const int startAddress, const quint16 length);
-  void setWrite(const int startAddress, const QList<quint16>& datas);
+  void setWrite(const int startAddress, const QVector<quint16>& datas);
 
 signals:
   void failed(const QString& msg, const int state = 1);

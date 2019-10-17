@@ -104,11 +104,10 @@ bool Communication::open() {
     m_client->setConnectionParameter(QModbusDevice::NetworkPortParameter,
                                      QVariant(m_port));
   }
-  if (m_client->state() == QModbusDevice::State::UnconnectedState) {
+  if (m_client->state() != QModbusDevice::State::ConnectedState) {
     return m_client->connectDevice();
-  } else {
-    return (m_client->state() == QModbusDevice::State::ConnectedState);
   }
+  return true;
 }
 
 QString Communication::ipaddress() const { return m_ipaddress; }
@@ -123,11 +122,16 @@ void Communication::setRead(const QModbusDataUnit::RegisterType regType,
 }
 
 void Communication::setWrite(const int startAddress,
-                             const QList<quint16>& datas) {
-  QModbusDataUnit unit(QModbusDataUnit::RegisterType::HoldingRegisters);
-  unit.setStartAddress(startAddress);
-  unit.setValues(datas.toVector());
-  m_writes.append(unit);
+                             const QVector<quint16>& datas) {
+  if (open()) {
+    m_client->sendWriteRequest(
+        QModbusDataUnit(QModbusDataUnit::InputRegisters, startAddress, datas),
+        1);
+  }
+  //  QModbusDataUnit unit(QModbusDataUnit::RegisterType::HoldingRegisters);
+  //  unit.setStartAddress(startAddress);
+  //  unit.setValues(datas.toVector());
+  //  m_writes.append(unit);
 }
 
 void Communication::stateChanged(QModbusDevice::State state) {
