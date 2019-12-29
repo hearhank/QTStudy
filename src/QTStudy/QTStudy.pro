@@ -4,5 +4,9 @@ SUBDIRS += \
     CPPQML \
     CacheDBSettings \
     ChartShow \
+    LibNet \
     ModbusCommunication \
-    ModbusMasterTest
+    ModbusMasterTest \
+    UDPServerC1 \
+    UDPServerC2
+
